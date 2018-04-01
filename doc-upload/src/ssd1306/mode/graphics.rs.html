@@ -250,42 +250,26 @@
 <span id="193">193</span>
 <span id="194">194</span>
 <span id="195">195</span>
-<span id="196">196</span>
-<span id="197">197</span>
-<span id="198">198</span>
-<span id="199">199</span>
-<span id="200">200</span>
-<span id="201">201</span>
-<span id="202">202</span>
-<span id="203">203</span>
-<span id="204">204</span>
-<span id="205">205</span>
-<span id="206">206</span>
-<span id="207">207</span>
-<span id="208">208</span>
-<span id="209">209</span>
-<span id="210">210</span>
-<span id="211">211</span>
-<span id="212">212</span>
-<span id="213">213</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! Buffered display module for use with the embedded_graphics crate</span>
 
 <span class="kw">use</span> <span class="ident">displaysize</span>::<span class="ident">DisplaySize</span>;
+<span class="kw">use</span> <span class="ident">displayrotation</span>::<span class="ident">DisplayRotation</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">displayrotation</span>::<span class="ident">DisplayRotation</span>;
 <span class="kw">use</span> <span class="ident">command</span>::{<span class="ident">AddrMode</span>, <span class="ident">Command</span>, <span class="ident">VcomhLevel</span>};
 
 <span class="kw">use</span> <span class="ident">hal</span>::<span class="ident">blocking</span>::<span class="ident">delay</span>::<span class="ident">DelayMs</span>;
 <span class="kw">use</span> <span class="ident">hal</span>::<span class="ident">digital</span>::<span class="ident">OutputPin</span>;
 <span class="kw">use</span> <span class="ident">interface</span>::<span class="ident">DisplayInterface</span>;
+<span class="kw">use</span> <span class="ident">properties</span>::<span class="ident">DisplayProperties</span>;
 
 <span class="doccomment">/// GraphicsMode</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GraphicsMode</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span> {
-    <span class="ident">iface</span>: <span class="ident">DI</span>,
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GraphicsMode</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+    <span class="ident">DI</span>: <span class="ident">DisplayInterface</span>,
+{
+    <span class="ident">properties</span>: <span class="ident">DisplayProperties</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>,
     <span class="ident">buffer</span>: [<span class="ident">u8</span>; <span class="number">1024</span>],
-    <span class="ident">display_size</span>: <span class="ident">DisplaySize</span>,
-    <span class="ident">display_rotation</span>: <span class="ident">DisplayRotation</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span> <span class="ident">GraphicsMode</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>
@@ -293,15 +277,9 @@
     <span class="ident">DI</span>: <span class="ident">DisplayInterface</span>,
 {
     <span class="doccomment">/// Create new GraphicsMode instance</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(
-        <span class="ident">iface</span>: <span class="ident">DI</span>,
-        <span class="ident">display_size</span>: <span class="ident">DisplaySize</span>,
-        <span class="ident">display_rotation</span>: <span class="ident">DisplayRotation</span>,
-    ) <span class="op">-&gt;</span> <span class="ident">GraphicsMode</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">properties</span>: <span class="ident">DisplayProperties</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">GraphicsMode</span> {
-            <span class="ident">iface</span>,
-            <span class="ident">display_size</span>,
-            <span class="ident">display_rotation</span>,
+            <span class="ident">properties</span>,
             <span class="ident">buffer</span>: [<span class="number">0</span>; <span class="number">1024</span>],
         }
     }
@@ -326,24 +304,28 @@
 
     <span class="doccomment">/// Write out data to display</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flush</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DI</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> (<span class="ident">display_width</span>, <span class="ident">display_height</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">display_size</span>.<span class="ident">dimensions</span>();
+        <span class="kw">let</span> <span class="ident">display_size</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">get_size</span>();
+        <span class="kw">let</span> <span class="ident">iface</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">borrow_iface_mut</span>();
 
-        <span class="ident">Command</span>::<span class="ident">ColumnAddress</span>(<span class="number">0</span>, <span class="ident">display_width</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-        <span class="ident">Command</span>::<span class="ident">PageAddress</span>(<span class="number">0</span>.<span class="ident">into</span>(), (<span class="ident">display_height</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">into</span>()).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> (<span class="ident">display_width</span>, <span class="ident">display_height</span>) <span class="op">=</span> <span class="ident">display_size</span>.<span class="ident">dimensions</span>();
 
-        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">display_size</span> {
-            <span class="ident">DisplaySize</span>::<span class="ident">Display128x64</span> <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">iface</span>.<span class="ident">send_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">buffer</span>),
-            <span class="ident">DisplaySize</span>::<span class="ident">Display128x32</span> <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">iface</span>.<span class="ident">send_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">buffer</span>[<span class="number">0</span>..<span class="number">512</span>]),
-            <span class="ident">DisplaySize</span>::<span class="ident">Display96x16</span> <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">iface</span>.<span class="ident">send_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">buffer</span>[<span class="number">0</span>..<span class="number">192</span>]),
+        <span class="ident">Command</span>::<span class="ident">ColumnAddress</span>(<span class="number">0</span>, <span class="ident">display_width</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">send</span>(<span class="ident">iface</span>)<span class="question-mark">?</span>;
+        <span class="ident">Command</span>::<span class="ident">PageAddress</span>(<span class="number">0</span>.<span class="ident">into</span>(), (<span class="ident">display_height</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">into</span>()).<span class="ident">send</span>(<span class="ident">iface</span>)<span class="question-mark">?</span>;
+
+        <span class="kw">match</span> <span class="ident">display_size</span> {
+            <span class="ident">DisplaySize</span>::<span class="ident">Display128x64</span> <span class="op">=&gt;</span> <span class="ident">iface</span>.<span class="ident">send_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">buffer</span>),
+            <span class="ident">DisplaySize</span>::<span class="ident">Display128x32</span> <span class="op">=&gt;</span> <span class="ident">iface</span>.<span class="ident">send_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">buffer</span>[<span class="number">0</span>..<span class="number">512</span>]),
+            <span class="ident">DisplaySize</span>::<span class="ident">Display96x16</span> <span class="op">=&gt;</span> <span class="ident">iface</span>.<span class="ident">send_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">buffer</span>[<span class="number">0</span>..<span class="number">192</span>]),
         }
     }
 
     <span class="doccomment">/// Turn a pixel on or off. A non-zero `value` is treated as on, `0` as off. If the X and Y</span>
-    <span class="comment">//// coordinates are out of the bounds of the display, this method call is a noop.</span>
+    <span class="doccomment">/// coordinates are out of the bounds of the display, this method call is a noop.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_pixel</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">x</span>: <span class="ident">u32</span>, <span class="ident">y</span>: <span class="ident">u32</span>, <span class="ident">value</span>: <span class="ident">u8</span>) {
-        <span class="kw">let</span> (<span class="ident">display_width</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">display_size</span>.<span class="ident">dimensions</span>();
+        <span class="kw">let</span> (<span class="ident">display_width</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">get_size</span>().<span class="ident">dimensions</span>();
+        <span class="kw">let</span> <span class="ident">display_rotation</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">get_rotation</span>();
 
-        <span class="kw">let</span> <span class="ident">idx</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">display_rotation</span> {
+        <span class="kw">let</span> <span class="ident">idx</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">display_rotation</span> {
             <span class="ident">DisplayRotation</span>::<span class="ident">Rotate0</span> <span class="op">|</span> <span class="ident">DisplayRotation</span>::<span class="ident">Rotate180</span> <span class="op">=&gt;</span> {
                 ((<span class="ident">y</span> <span class="kw">as</span> <span class="ident">usize</span>) <span class="op">/</span> <span class="number">8</span> <span class="op">*</span> <span class="ident">display_width</span> <span class="kw">as</span> <span class="ident">usize</span>) <span class="op">+</span> (<span class="ident">x</span> <span class="kw">as</span> <span class="ident">usize</span>)
             }
@@ -357,7 +339,7 @@
             <span class="kw">return</span>;
         }
 
-        <span class="kw">let</span> (<span class="ident">byte</span>, <span class="ident">bit</span>) <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">display_rotation</span> {
+        <span class="kw">let</span> (<span class="ident">byte</span>, <span class="ident">bit</span>) <span class="op">=</span> <span class="kw">match</span> <span class="ident">display_rotation</span> {
             <span class="ident">DisplayRotation</span>::<span class="ident">Rotate0</span> <span class="op">|</span> <span class="ident">DisplayRotation</span>::<span class="ident">Rotate180</span> <span class="op">=&gt;</span> {
                 <span class="kw">let</span> <span class="ident">byte</span> <span class="op">=</span>
                     <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">buffer</span>[((<span class="ident">y</span> <span class="kw">as</span> <span class="ident">usize</span>) <span class="op">/</span> <span class="number">8</span> <span class="op">*</span> <span class="ident">display_width</span> <span class="kw">as</span> <span class="ident">usize</span>) <span class="op">+</span> (<span class="ident">x</span> <span class="kw">as</span> <span class="ident">usize</span>)];
@@ -384,55 +366,38 @@
     <span class="comment">// Display is set up in column mode, i.e. a byte walks down a column of 8 pixels from column 0 on the left, to column _n_ on the right</span>
     <span class="doccomment">/// Initialize display in column mode.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">init</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DI</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">display_height</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">display_size</span>.<span class="ident">dimensions</span>();
+        <span class="kw">let</span> <span class="ident">display_size</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">get_size</span>();
+        <span class="kw">let</span> <span class="ident">display_rotation</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">get_rotation</span>();
+        <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">display_height</span>) <span class="op">=</span> <span class="ident">display_size</span>.<span class="ident">dimensions</span>();
 
-        <span class="ident">Command</span>::<span class="ident">DisplayOn</span>(<span class="bool-val">false</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-        <span class="ident">Command</span>::<span class="ident">DisplayClockDiv</span>(<span class="number">0x8</span>, <span class="number">0x0</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-        <span class="ident">Command</span>::<span class="ident">Multiplex</span>(<span class="ident">display_height</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-        <span class="ident">Command</span>::<span class="ident">DisplayOffset</span>(<span class="number">0</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-        <span class="ident">Command</span>::<span class="ident">StartLine</span>(<span class="number">0</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-        <span class="comment">// TODO: Ability to turn charge pump on/off</span>
-        <span class="ident">Command</span>::<span class="ident">ChargePump</span>(<span class="bool-val">true</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-        <span class="ident">Command</span>::<span class="ident">AddressMode</span>(<span class="ident">AddrMode</span>::<span class="ident">Horizontal</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
+        {
+            <span class="kw">let</span> <span class="ident">iface</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">borrow_iface_mut</span>();
+            <span class="ident">Command</span>::<span class="ident">DisplayOn</span>(<span class="bool-val">false</span>).<span class="ident">send</span>(<span class="ident">iface</span>)<span class="question-mark">?</span>;
+            <span class="ident">Command</span>::<span class="ident">DisplayClockDiv</span>(<span class="number">0x8</span>, <span class="number">0x0</span>).<span class="ident">send</span>(<span class="ident">iface</span>)<span class="question-mark">?</span>;
+            <span class="ident">Command</span>::<span class="ident">Multiplex</span>(<span class="ident">display_height</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">send</span>(<span class="ident">iface</span>)<span class="question-mark">?</span>;
+            <span class="ident">Command</span>::<span class="ident">DisplayOffset</span>(<span class="number">0</span>).<span class="ident">send</span>(<span class="ident">iface</span>)<span class="question-mark">?</span>;
+            <span class="ident">Command</span>::<span class="ident">StartLine</span>(<span class="number">0</span>).<span class="ident">send</span>(<span class="ident">iface</span>)<span class="question-mark">?</span>;
+            <span class="comment">// TODO: Ability to turn charge pump on/off</span>
+            <span class="ident">Command</span>::<span class="ident">ChargePump</span>(<span class="bool-val">true</span>).<span class="ident">send</span>(<span class="ident">iface</span>)<span class="question-mark">?</span>;
+            <span class="ident">Command</span>::<span class="ident">AddressMode</span>(<span class="ident">AddrMode</span>::<span class="ident">Horizontal</span>).<span class="ident">send</span>(<span class="ident">iface</span>)<span class="question-mark">?</span>;
+        }
 
-        <span class="self">self</span>.<span class="ident">configure_rotation</span>()<span class="question-mark">?</span>;
+        <span class="self">self</span>.<span class="ident">set_rotation</span>(<span class="ident">display_rotation</span>)<span class="question-mark">?</span>;
 
-        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">display_size</span> {
-            <span class="ident">DisplaySize</span>::<span class="ident">Display128x32</span> <span class="op">=&gt;</span> <span class="ident">Command</span>::<span class="ident">ComPinConfig</span>(<span class="bool-val">false</span>, <span class="bool-val">false</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>),
-            <span class="ident">DisplaySize</span>::<span class="ident">Display128x64</span> <span class="op">=&gt;</span> <span class="ident">Command</span>::<span class="ident">ComPinConfig</span>(<span class="bool-val">true</span>, <span class="bool-val">false</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>),
-            <span class="ident">DisplaySize</span>::<span class="ident">Display96x16</span> <span class="op">=&gt;</span> <span class="ident">Command</span>::<span class="ident">ComPinConfig</span>(<span class="bool-val">false</span>, <span class="bool-val">false</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>),
+        <span class="kw">let</span> <span class="ident">iface</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">borrow_iface_mut</span>();
+        <span class="kw">match</span> <span class="ident">display_size</span> {
+            <span class="ident">DisplaySize</span>::<span class="ident">Display128x32</span> <span class="op">=&gt;</span> <span class="ident">Command</span>::<span class="ident">ComPinConfig</span>(<span class="bool-val">false</span>, <span class="bool-val">false</span>).<span class="ident">send</span>(<span class="ident">iface</span>),
+            <span class="ident">DisplaySize</span>::<span class="ident">Display128x64</span> <span class="op">=&gt;</span> <span class="ident">Command</span>::<span class="ident">ComPinConfig</span>(<span class="bool-val">true</span>, <span class="bool-val">false</span>).<span class="ident">send</span>(<span class="ident">iface</span>),
+            <span class="ident">DisplaySize</span>::<span class="ident">Display96x16</span> <span class="op">=&gt;</span> <span class="ident">Command</span>::<span class="ident">ComPinConfig</span>(<span class="bool-val">false</span>, <span class="bool-val">false</span>).<span class="ident">send</span>(<span class="ident">iface</span>),
         }<span class="question-mark">?</span>;
 
-        <span class="ident">Command</span>::<span class="ident">Contrast</span>(<span class="number">0x8F</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-        <span class="ident">Command</span>::<span class="ident">PreChargePeriod</span>(<span class="number">0x1</span>, <span class="number">0xF</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-        <span class="ident">Command</span>::<span class="ident">VcomhDeselect</span>(<span class="ident">VcomhLevel</span>::<span class="ident">Auto</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-        <span class="ident">Command</span>::<span class="ident">AllOn</span>(<span class="bool-val">false</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-        <span class="ident">Command</span>::<span class="ident">Invert</span>(<span class="bool-val">false</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-        <span class="ident">Command</span>::<span class="ident">EnableScroll</span>(<span class="bool-val">false</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-        <span class="ident">Command</span>::<span class="ident">DisplayOn</span>(<span class="bool-val">true</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-
-        <span class="prelude-val">Ok</span>(())
-    }
-
-    <span class="kw">fn</span> <span class="ident">configure_rotation</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DI</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">display_rotation</span> {
-            <span class="ident">DisplayRotation</span>::<span class="ident">Rotate0</span> <span class="op">=&gt;</span> {
-                <span class="ident">Command</span>::<span class="ident">SegmentRemap</span>(<span class="bool-val">true</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-                <span class="ident">Command</span>::<span class="ident">ReverseComDir</span>(<span class="bool-val">true</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-            }
-            <span class="ident">DisplayRotation</span>::<span class="ident">Rotate90</span> <span class="op">=&gt;</span> {
-                <span class="ident">Command</span>::<span class="ident">SegmentRemap</span>(<span class="bool-val">false</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-                <span class="ident">Command</span>::<span class="ident">ReverseComDir</span>(<span class="bool-val">true</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-            }
-            <span class="ident">DisplayRotation</span>::<span class="ident">Rotate180</span> <span class="op">=&gt;</span> {
-                <span class="ident">Command</span>::<span class="ident">SegmentRemap</span>(<span class="bool-val">false</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-                <span class="ident">Command</span>::<span class="ident">ReverseComDir</span>(<span class="bool-val">false</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-            }
-            <span class="ident">DisplayRotation</span>::<span class="ident">Rotate270</span> <span class="op">=&gt;</span> {
-                <span class="ident">Command</span>::<span class="ident">SegmentRemap</span>(<span class="bool-val">true</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-                <span class="ident">Command</span>::<span class="ident">ReverseComDir</span>(<span class="bool-val">false</span>).<span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">iface</span>)<span class="question-mark">?</span>;
-            }
-        };
+        <span class="ident">Command</span>::<span class="ident">Contrast</span>(<span class="number">0x8F</span>).<span class="ident">send</span>(<span class="ident">iface</span>)<span class="question-mark">?</span>;
+        <span class="ident">Command</span>::<span class="ident">PreChargePeriod</span>(<span class="number">0x1</span>, <span class="number">0xF</span>).<span class="ident">send</span>(<span class="ident">iface</span>)<span class="question-mark">?</span>;
+        <span class="ident">Command</span>::<span class="ident">VcomhDeselect</span>(<span class="ident">VcomhLevel</span>::<span class="ident">Auto</span>).<span class="ident">send</span>(<span class="ident">iface</span>)<span class="question-mark">?</span>;
+        <span class="ident">Command</span>::<span class="ident">AllOn</span>(<span class="bool-val">false</span>).<span class="ident">send</span>(<span class="ident">iface</span>)<span class="question-mark">?</span>;
+        <span class="ident">Command</span>::<span class="ident">Invert</span>(<span class="bool-val">false</span>).<span class="ident">send</span>(<span class="ident">iface</span>)<span class="question-mark">?</span>;
+        <span class="ident">Command</span>::<span class="ident">EnableScroll</span>(<span class="bool-val">false</span>).<span class="ident">send</span>(<span class="ident">iface</span>)<span class="question-mark">?</span>;
+        <span class="ident">Command</span>::<span class="ident">DisplayOn</span>(<span class="bool-val">true</span>).<span class="ident">send</span>(<span class="ident">iface</span>)<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(())
     }
@@ -440,9 +405,10 @@
     <span class="doccomment">/// Get display dimensions, taking into account the current rotation of the display</span>
     <span class="comment">// TODO: Replace (u8, u8) with a dimensioney type for consistency</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_dimensions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> (<span class="ident">u8</span>, <span class="ident">u8</span>) {
-        <span class="kw">let</span> (<span class="ident">w</span>, <span class="ident">h</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">display_size</span>.<span class="ident">dimensions</span>();
+        <span class="kw">let</span> (<span class="ident">w</span>, <span class="ident">h</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">get_size</span>().<span class="ident">dimensions</span>();
+        <span class="kw">let</span> <span class="ident">display_rotation</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">get_rotation</span>();
 
-        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">display_rotation</span> {
+        <span class="kw">match</span> <span class="ident">display_rotation</span> {
             <span class="ident">DisplayRotation</span>::<span class="ident">Rotate0</span> <span class="op">|</span> <span class="ident">DisplayRotation</span>::<span class="ident">Rotate180</span> <span class="op">=&gt;</span> (<span class="ident">w</span>, <span class="ident">h</span>),
             <span class="ident">DisplayRotation</span>::<span class="ident">Rotate90</span> <span class="op">|</span> <span class="ident">DisplayRotation</span>::<span class="ident">Rotate270</span> <span class="op">=&gt;</span> (<span class="ident">h</span>, <span class="ident">w</span>),
         }
@@ -450,9 +416,7 @@
 
     <span class="doccomment">/// Set the display rotation</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_rotation</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">rot</span>: <span class="ident">DisplayRotation</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DI</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">display_rotation</span> <span class="op">=</span> <span class="ident">rot</span>;
-
-        <span class="self">self</span>.<span class="ident">configure_rotation</span>()
+        <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">set_rotation</span>(<span class="ident">rot</span>)
     }
 }
 

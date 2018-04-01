@@ -82,40 +82,32 @@
 <span id="25">25</span>
 <span id="26">26</span>
 <span id="27">27</span>
-<span id="28">28</span>
-<span id="29">29</span>
-<span id="30">30</span>
-<span id="31">31</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! A raw display mode</span>
 
-<span class="kw">use</span> <span class="ident">displayrotation</span>::<span class="ident">DisplayRotation</span>;
-<span class="kw">use</span> <span class="ident">displaysize</span>::<span class="ident">DisplaySize</span>;
 <span class="kw">use</span> <span class="ident">interface</span>::<span class="ident">DisplayInterface</span>;
+<span class="kw">use</span> <span class="ident">properties</span>::<span class="ident">DisplayProperties</span>;
 
 <span class="kw">use</span> <span class="ident">mode</span>::<span class="ident">graphics</span>::<span class="ident">GraphicsMode</span>;
 
 <span class="doccomment">/// A display mode without higher level mostly meant as a stepstone for changing into higher</span>
 <span class="doccomment">/// abstracted modes</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RawMode</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span> {
-    <span class="ident">iface</span>: <span class="ident">DI</span>,
-    <span class="ident">display_size</span>: <span class="ident">DisplaySize</span>,
-    <span class="ident">display_rotation</span>: <span class="ident">DisplayRotation</span>,
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RawMode</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+    <span class="ident">DI</span>: <span class="ident">DisplayInterface</span>,
+{
+    <span class="ident">properties</span>: <span class="ident">DisplayProperties</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">DI</span>: <span class="ident">DisplayInterface</span><span class="op">&gt;</span> <span class="ident">RawMode</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Create a new raw display mode</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">iface</span>: <span class="ident">DI</span>, <span class="ident">display_size</span>: <span class="ident">DisplaySize</span>, <span class="ident">display_rotation</span>: <span class="ident">DisplayRotation</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
-        <span class="ident">RawMode</span> {
-            <span class="ident">iface</span>,
-            <span class="ident">display_size</span>,
-            <span class="ident">display_rotation</span>,
-        }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">properties</span>: <span class="ident">DisplayProperties</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="ident">RawMode</span> { <span class="ident">properties</span> }
     }
 
     <span class="doccomment">/// Changed into graphics mode</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_graphicsmode</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">GraphicsMode</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span> {
-        <span class="ident">GraphicsMode</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">iface</span>, <span class="self">self</span>.<span class="ident">display_size</span>, <span class="self">self</span>.<span class="ident">display_rotation</span>)
+        <span class="ident">GraphicsMode</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">properties</span>)
     }
 }
 </pre>

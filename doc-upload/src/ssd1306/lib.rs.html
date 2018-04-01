@@ -81,6 +81,7 @@
 <span id="24">24</span>
 <span id="25">25</span>
 <span id="26">26</span>
+<span id="27">27</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! SSD1306 OLED display driver</span>
 
@@ -101,10 +102,11 @@
 
 <span class="kw">mod</span> <span class="ident">command</span>;
 <span class="kw">mod</span> <span class="ident">displaysize</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">displayrotation</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">builder</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">displayrotation</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">interface</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">mode</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">properties</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">builder</span>::<span class="ident">Builder</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">displaysize</span>::<span class="ident">DisplaySize</span>;
