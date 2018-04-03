@@ -10,7 +10,7 @@ use properties::DisplayProperties;
 // pub struct DisplayMode<MODE>(MODE);
 
 /// Trait with core functionality for display mode switching
-pub trait DisplayTrait<DI> {
+pub trait DisplayMode<DI> {
     /// Allocate all required data and initialise display for mode
     fn new(properties: DisplayProperties<DI>) -> Self;
 

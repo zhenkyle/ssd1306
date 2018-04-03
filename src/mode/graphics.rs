@@ -10,7 +10,7 @@ use hal::digital::OutputPin;
 use interface::DisplayInterface;
 use properties::DisplayProperties;
 
-use mode::displaymode::DisplayTrait;
+use mode::displaymode::DisplayMode;
 use mode::raw::RawMode;
 
 /// GraphicsMode
@@ -34,7 +34,7 @@ where
     }
 }
 
-impl<DI> DisplayTrait<DI> for GraphicsMode<DI>
+impl<DI> DisplayMode<DI> for GraphicsMode<DI>
 where
     DI: DisplayInterface,
 {
