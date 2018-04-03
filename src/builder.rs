@@ -8,7 +8,6 @@ use super::displayrotation::DisplayRotation;
 use super::interface::{I2cInterface, SpiInterface};
 use super::properties::DisplayProperties;
 use mode::raw::RawMode;
-use mode::displaymode::DisplayMode;
 
 /// Communication interface factory
 #[derive(Clone, Copy)]
@@ -63,13 +62,13 @@ impl Builder {
     }
 
     /// Create spi communication interface
-    pub fn connect_spi<SPI, DC>(&self, spi: SPI, dc: DC) -> DisplayMode<RawMode<SpiInterface<SPI, DC>>>
+    pub fn connect_spi<SPI, DC>(&self, spi: SPI, dc: DC) -> RawMode<SpiInterface<SPI, DC>>
     where
         SPI: hal::blocking::spi::Transfer<u8> + hal::blocking::spi::Write<u8>,
         DC: OutputPin,
     {
         let properties =
             DisplayProperties::new(SpiInterface::new(spi, dc), self.display_size, self.rotation);
-        DisplayMode::<RawMode<SpiInterface<SPI, DC>>>::new(properties)
+        RawMode::new(properties)
     }
 }
