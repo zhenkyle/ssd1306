@@ -107,7 +107,7 @@ fn init(p: init::Peripherals) -> init::LateResources {
         &mut rcc.apb2,
     );
 
-    let mut disp: OledDisplay = Builder::new().connect_spi(spi, dc).into();
+    let mut disp = Builder::new().connect_spi(spi, dc).into_graphicsmode();
 
     disp.reset(&mut rst, &mut delay);
     disp.init().unwrap();

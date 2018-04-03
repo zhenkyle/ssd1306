@@ -4,6 +4,7 @@ use interface::DisplayInterface;
 use properties::DisplayProperties;
 
 use mode::displaymode::DisplayMode;
+use mode::graphics::GraphicsMode;
 
 /// A display mode without higher level mostly meant as a stepstone for changing into higher
 /// abstracted modes
@@ -36,5 +37,10 @@ impl<DI: DisplayInterface> RawMode<DI> {
     /// Create a new raw display mode
     pub fn new(properties: DisplayProperties<DI>) -> Self {
         RawMode { properties }
+    }
+
+    /// Use graphics mode for interface
+    pub fn into_graphicsmode(self) -> GraphicsMode<DI> {
+        self.into()
     }
 }

@@ -82,7 +82,7 @@ fn init(p: init::Peripherals) -> init::LateResources {
         &mut rcc.apb1,
     );
 
-    let mut disp: OledDisplay = Builder::new().connect_i2c(i2c).into();
+    let mut disp = Builder::new().connect_i2c(i2c).into_graphicsmode();
 
     disp.init().unwrap();
     disp.flush().unwrap();
