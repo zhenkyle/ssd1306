@@ -50,7 +50,7 @@ impl Builder {
     }
 
     /// Create i2c communication interface
-    pub fn connect_i2c<I2C>(&self, i2c: I2C) -> DisplayMode<RawMode<I2cInterface<I2C>>>
+    pub fn connect_i2c<I2C>(&self, i2c: I2C) -> RawMode<I2cInterface<I2C>>
     where
         I2C: hal::blocking::i2c::Write,
     {
@@ -59,7 +59,7 @@ impl Builder {
             self.display_size,
             self.rotation,
         );
-        DisplayMode::<RawMode<I2cInterface<I2C>>>::new(properties)
+        RawMode::new(properties)
     }
 
     /// Create spi communication interface

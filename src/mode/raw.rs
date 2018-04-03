@@ -11,7 +11,8 @@ pub struct RawMode<DI>
 where
     DI: DisplayInterface,
 {
-    properties: DisplayProperties<DI>,
+    /// Display properties
+    pub properties: DisplayProperties<DI>,
 }
 
 impl<DI> DisplayTrait<DI> for RawMode<DI>

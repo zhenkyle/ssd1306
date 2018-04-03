@@ -11,6 +11,7 @@ use interface::DisplayInterface;
 use properties::DisplayProperties;
 
 use mode::displaymode::DisplayTrait;
+use mode::raw::RawMode;
 
 /// GraphicsMode
 pub struct GraphicsMode<DI>
@@ -19,6 +20,18 @@ where
 {
     properties: DisplayProperties<DI>,
     buffer: [u8; 1024],
+}
+
+impl<DI> From<RawMode<DI>> for GraphicsMode<DI>
+where
+    DI: DisplayInterface,
+{
+    fn from(raw: RawMode<DI>) -> Self {
+        GraphicsMode {
+            properties: raw.release(),
+            buffer: [0; 1024],
+        }
+    }
 }
 
 impl<DI> DisplayTrait<DI> for GraphicsMode<DI>
