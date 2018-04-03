@@ -19,6 +19,26 @@ use embedded_graphics::primitives::{Circle, Line, Rect};
 use hal::spi::{Mode, Phase, Polarity};
 use ssd1306::Builder;
 
+use blue_pill::stm32f103xx::SPI1;
+use blue_pill::gpio::gpioa::{PA5, PA6, PA7};
+use blue_pill::gpio::gpiob::PB1;
+use blue_pill::gpio::{Alternate, Floating, Input, Output, PushPull};
+use ssd1306::{interface::SpiInterface, mode::GraphicsMode};
+
+type OledDisplay = GraphicsMode<
+    SpiInterface<
+        Spi<
+            SPI1,
+            (
+                PA5<Alternate<PushPull>>,
+                PA6<Input<Floating>>,
+                PA7<Alternate<PushPull>>,
+            ),
+        >,
+        PB1<Output<PushPull>>, // B1 -> DC
+    >,
+>;
+
 fn main() {
     let cp = cortex_m::Peripherals::take().unwrap();
     let dp = blue_pill::stm32f103xx::Peripherals::take().unwrap();
@@ -56,7 +76,7 @@ fn main() {
         &mut rcc.apb2,
     );
 
-    let mut disp = Builder::new().connect_spi(spi, dc).into_graphicsmode();
+    let mut disp: OledDisplay = Builder::new().connect_spi(spi, dc).into();
 
     disp.reset(&mut rst, &mut delay);
     disp.init().unwrap();
