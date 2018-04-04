@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["graphics","Buffered display module for use with the embedded_graphics crate"],["raw","A raw display mode"]]});
+initSidebarItems({"mod":[["displaymode","Abstraction of different operating modes for the SSD1306"],["graphics","Buffered display module for use with the embedded_graphics crate"],["raw","A raw display mode"]]});

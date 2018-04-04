@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `src/mode/mod.rs`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang">
+    <meta name="description" content="API documentation for the Rust `displaymode` mod in crate `ssd1306`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, displaymode">
 
-    <title>mod.rs.html -- source</title>
+    <title>ssd1306::mode::displaymode - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../../rustdoc.css"
@@ -21,7 +21,7 @@
     
     
 </head>
-<body class="rustdoc source">
+<body class="rustdoc mod">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -34,7 +34,7 @@
     <nav class="sidebar">
         <div class="sidebar-menu">&#9776;</div>
         
-        
+        <p class='location'>Module displaymode</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#structs">Structs</a></li><li><a href="#traits">Traits</a></li></ul></div><p class='location'><a href='../../index.html'>ssd1306</a>::<wbr><a href='../index.html'>mode</a></p><script>window.sidebarCurrent = {name: 'displaymode', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div>
     </nav>
 
     <div class="theme-picker">
@@ -55,25 +55,30 @@
         </form>
     </nav>
 
-    <section id='main' class="content"><pre class="line-numbers"><span id="1">1</span>
-<span id="2">2</span>
-<span id="3">3</span>
-<span id="4">4</span>
-<span id="5">5</span>
-<span id="6">6</span>
-<span id="7">7</span>
-<span id="8">8</span>
-</pre><pre class="rust ">
-<span class="doccomment">//! Abstraction of different operating modes for the SSD1306</span>
+    <section id='main' class="content"><h1 class='fqn'><span class='in-band'>Module <a href='../../index.html'>ssd1306</a>::<wbr><a href='../index.html'>mode</a>::<wbr><a class="mod" href=''>displaymode</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../../../src/ssd1306/mode/displaymode.rs.html#1-39' title='goto source code'>[src]</a></span></h1><div class='docblock'><p>Abstraction of different operating modes for the SSD1306</p>
+</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.DisplayMode.html"
+                                  title='struct ssd1306::mode::displaymode::DisplayMode'>DisplayMode</a></td>
+                           <td class='docblock-short'>
+                                <p>Display mode abstraction</p>
 
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">displaymode</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">graphics</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">raw</span>;
+                           </td>
+                       </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="trait" href="trait.DisplayModeTrait.html"
+                                  title='trait ssd1306::mode::displaymode::DisplayModeTrait'>DisplayModeTrait</a></td>
+                           <td class='docblock-short'>
+                                <p>Trait with core functionality for display mode switching</p>
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">graphics</span>::<span class="ident">GraphicsMode</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">raw</span>::<span class="ident">RawMode</span>;
-</pre>
-</section>
+                           </td>
+                       </tr></table></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>

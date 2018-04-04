@@ -129,6 +129,7 @@
 <span id="72">72</span>
 <span id="73">73</span>
 <span id="74">74</span>
+<span id="75">75</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! Interface factory</span>
 
@@ -140,6 +141,7 @@
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">interface</span>::{<span class="ident">I2cInterface</span>, <span class="ident">SpiInterface</span>};
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">properties</span>::<span class="ident">DisplayProperties</span>;
 <span class="kw">use</span> <span class="ident">mode</span>::<span class="ident">raw</span>::<span class="ident">RawMode</span>;
+<span class="kw">use</span> <span class="ident">mode</span>::<span class="ident">displaymode</span>::<span class="ident">DisplayMode</span>;
 
 <span class="doccomment">/// Communication interface factory</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
@@ -181,7 +183,7 @@
     }
 
     <span class="doccomment">/// Create i2c communication interface</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connect_i2c</span><span class="op">&lt;</span><span class="ident">I2C</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">i2c</span>: <span class="ident">I2C</span>) <span class="op">-&gt;</span> <span class="ident">RawMode</span><span class="op">&lt;</span><span class="ident">I2cInterface</span><span class="op">&lt;</span><span class="ident">I2C</span><span class="op">&gt;&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connect_i2c</span><span class="op">&lt;</span><span class="ident">I2C</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">i2c</span>: <span class="ident">I2C</span>) <span class="op">-&gt;</span> <span class="ident">DisplayMode</span><span class="op">&lt;</span><span class="ident">RawMode</span><span class="op">&lt;</span><span class="ident">I2cInterface</span><span class="op">&lt;</span><span class="ident">I2C</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">I2C</span>: <span class="ident">hal</span>::<span class="ident">blocking</span>::<span class="ident">i2c</span>::<span class="ident">Write</span>,
     {
@@ -190,18 +192,18 @@
             <span class="self">self</span>.<span class="ident">display_size</span>,
             <span class="self">self</span>.<span class="ident">rotation</span>,
         );
-        <span class="ident">RawMode</span>::<span class="ident">new</span>(<span class="ident">properties</span>)
+        <span class="ident">DisplayMode</span>::<span class="op">&lt;</span><span class="ident">RawMode</span><span class="op">&lt;</span><span class="ident">I2cInterface</span><span class="op">&lt;</span><span class="ident">I2C</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="ident">properties</span>)
     }
 
     <span class="doccomment">/// Create spi communication interface</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connect_spi</span><span class="op">&lt;</span><span class="ident">SPI</span>, <span class="ident">DC</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">spi</span>: <span class="ident">SPI</span>, <span class="ident">dc</span>: <span class="ident">DC</span>) <span class="op">-&gt;</span> <span class="ident">RawMode</span><span class="op">&lt;</span><span class="ident">SpiInterface</span><span class="op">&lt;</span><span class="ident">SPI</span>, <span class="ident">DC</span><span class="op">&gt;&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connect_spi</span><span class="op">&lt;</span><span class="ident">SPI</span>, <span class="ident">DC</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">spi</span>: <span class="ident">SPI</span>, <span class="ident">dc</span>: <span class="ident">DC</span>) <span class="op">-&gt;</span> <span class="ident">DisplayMode</span><span class="op">&lt;</span><span class="ident">RawMode</span><span class="op">&lt;</span><span class="ident">SpiInterface</span><span class="op">&lt;</span><span class="ident">SPI</span>, <span class="ident">DC</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">SPI</span>: <span class="ident">hal</span>::<span class="ident">blocking</span>::<span class="ident">spi</span>::<span class="ident">Transfer</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">hal</span>::<span class="ident">blocking</span>::<span class="ident">spi</span>::<span class="ident">Write</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
         <span class="ident">DC</span>: <span class="ident">OutputPin</span>,
     {
         <span class="kw">let</span> <span class="ident">properties</span> <span class="op">=</span>
             <span class="ident">DisplayProperties</span>::<span class="ident">new</span>(<span class="ident">SpiInterface</span>::<span class="ident">new</span>(<span class="ident">spi</span>, <span class="ident">dc</span>), <span class="self">self</span>.<span class="ident">display_size</span>, <span class="self">self</span>.<span class="ident">rotation</span>);
-        <span class="ident">RawMode</span>::<span class="ident">new</span>(<span class="ident">properties</span>)
+        <span class="ident">DisplayMode</span>::<span class="op">&lt;</span><span class="ident">RawMode</span><span class="op">&lt;</span><span class="ident">SpiInterface</span><span class="op">&lt;</span><span class="ident">SPI</span>, <span class="ident">DC</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>::<span class="ident">new</span>(<span class="ident">properties</span>)
     }
 }
 </pre>

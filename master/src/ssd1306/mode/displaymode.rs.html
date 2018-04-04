@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `src/mode/raw.rs`.">
+    <meta name="description" content="Source to the Rust file `src/mode/displaymode.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
-    <title>raw.rs.html -- source</title>
+    <title>displaymode.rs.html -- source</title>
 
     <link rel="stylesheet" type="text/css" href="../../../normalize.css">
     <link rel="stylesheet" type="text/css" href="../../../rustdoc.css"
@@ -95,43 +95,43 @@
 <span id="38">38</span>
 <span id="39">39</span>
 </pre><pre class="rust ">
-<span class="doccomment">//! A raw display mode</span>
+<span class="doccomment">//! Abstraction of different operating modes for the SSD1306</span>
+
+<span class="kw">use</span> <span class="kw">super</span>::<span class="ident">raw</span>::<span class="ident">RawMode</span>;
 
 <span class="kw">use</span> <span class="ident">interface</span>::<span class="ident">DisplayInterface</span>;
 <span class="kw">use</span> <span class="ident">properties</span>::<span class="ident">DisplayProperties</span>;
 
-<span class="kw">use</span> <span class="ident">mode</span>::<span class="ident">displaymode</span>::<span class="ident">DisplayModeTrait</span>;
+<span class="doccomment">/// Display mode abstraction</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DisplayMode</span><span class="op">&lt;</span><span class="ident">MODE</span><span class="op">&gt;</span>(<span class="kw">pub</span> <span class="ident">MODE</span>);
 
-<span class="doccomment">/// A display mode without higher level mostly meant as a stepstone for changing into higher</span>
-<span class="doccomment">/// abstracted modes</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RawMode</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">DI</span>: <span class="ident">DisplayInterface</span>,
-{
-    <span class="ident">properties</span>: <span class="ident">DisplayProperties</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>,
+<span class="doccomment">/// Trait with core functionality for display mode switching</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">DisplayModeTrait</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Allocate all required data and initialise display for mode</span>
+    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">properties</span>: <span class="ident">DisplayProperties</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span>;
+
+    <span class="doccomment">/// Release resources for reuse with different mode</span>
+    <span class="kw">fn</span> <span class="ident">release</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">DisplayProperties</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>;
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span> <span class="ident">DisplayModeTrait</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">RawMode</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">DI</span>: <span class="ident">DisplayInterface</span>,
-{
-    <span class="doccomment">/// Create new RawMode instance</span>
-    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">properties</span>: <span class="ident">DisplayProperties</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
-        <span class="ident">RawMode</span> {
-            <span class="ident">properties</span>,
-        }
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">MODE</span><span class="op">&gt;</span> <span class="ident">DisplayMode</span><span class="op">&lt;</span><span class="ident">MODE</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Setup display to run in raw mode</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>(<span class="ident">properties</span>: <span class="ident">DisplayProperties</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">DisplayMode</span><span class="op">&lt;</span><span class="ident">RawMode</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">DI</span>: <span class="ident">DisplayInterface</span>,
+    {
+        <span class="ident">DisplayMode</span>(<span class="ident">RawMode</span>::<span class="ident">new</span>(<span class="ident">properties</span>))
     }
 
-    <span class="doccomment">/// Release all resources used by RawMode</span>
-    <span class="kw">fn</span> <span class="ident">release</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">DisplayProperties</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">properties</span>
-    }
-}
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">DI</span>: <span class="ident">DisplayInterface</span><span class="op">&gt;</span> <span class="ident">RawMode</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Create a new raw display mode</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">properties</span>: <span class="ident">DisplayProperties</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
-        <span class="ident">RawMode</span> { <span class="ident">properties</span> }
+    <span class="doccomment">/// Change into any mode implementing DisplayModeTrait</span>
+    <span class="comment">// TODO: Figure out how to stay as generic DisplayMode but act as particular mode</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into</span><span class="op">&lt;</span><span class="ident">DI</span>, <span class="ident">NMODE</span>: <span class="ident">DisplayModeTrait</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;&gt;</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">NMODE</span>
+    <span class="kw">where</span>
+        <span class="ident">DI</span>: <span class="ident">DisplayInterface</span>,
+        <span class="ident">MODE</span>: <span class="ident">DisplayModeTrait</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>,
+    {
+        <span class="kw">let</span> <span class="ident">properties</span> <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">release</span>();
+        <span class="ident">NMODE</span>::<span class="ident">new</span>(<span class="ident">properties</span>)
     }
 }
 </pre>

@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["DisplayMode","Display mode abstraction"]],"trait":[["DisplayModeTrait","Trait with core functionality for display mode switching"]]});
