@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `GraphicsMode` struct in crate `ssd1306`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, GraphicsMode">
+
+    <title>ssd1306::mode::graphics::GraphicsMode - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../../rustdoc.css"
+          id="mainThemeStyle">
+    
+    <link rel="stylesheet" type="text/css" href="../../../dark.css">
+    <link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle">
+    <script src="../../../storage.js"></script>
+    
+
+    
+    
+</head>
+<body class="rustdoc struct">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
+        
+        <p class='location'>Struct GraphicsMode</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#methods">Methods</a><div class="sidebar-links"><a href="#method.new">new</a><a href="#method.clear">clear</a><a href="#method.reset">reset</a><a href="#method.flush">flush</a><a href="#method.set_pixel">set_pixel</a><a href="#method.init">init</a><a href="#method.get_dimensions">get_dimensions</a><a href="#method.set_rotation">set_rotation</a></div><a class="sidebar-title" href="#implementations">Trait Implementations</a><div class="sidebar-links"><a href="#impl-Drawing">Drawing</a></div><a class="sidebar-title" href="#synthetic-implementations">Auto Trait Implementations</a><div class="sidebar-links"><a href="#impl-Send">Send</a><a href="#impl-Sync">Sync</a></div></div><p class='location'><a href='../../index.html'>ssd1306</a>::<wbr><a href='../index.html'>mode</a>::<wbr><a href='index.html'>graphics</a></p><script>window.sidebarCurrent = {name: 'GraphicsMode', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script></div>
+    </nav>
+
+    <div class="theme-picker">
+        <button id="theme-picker" aria-label="Pick another theme!">
+            <img src="../../../brush.svg" width="18" alt="Pick another theme!">
+        </button>
+        <div id="theme-choices"></div>
+    </div>
+    <script src="../../../theme.js"></script>
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content"><h1 class='fqn'><span class='in-band'>Struct <a href='../../index.html'>ssd1306</a>::<wbr><a href='../index.html'>mode</a>::<wbr><a href='index.html'>graphics</a>::<wbr><a class="struct" href=''>GraphicsMode</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../../../src/ssd1306/mode/graphics.rs.html#14-20' title='goto source code'>[src]</a></span></h1><div class="docblock type-decl"><pre class='rust struct'>pub struct GraphicsMode&lt;DI&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;DI: <a class="trait" href="../../../ssd1306/interface/trait.DisplayInterface.html" title="trait ssd1306::interface::DisplayInterface">DisplayInterface</a>,&nbsp;</span> { /* fields omitted */ }</pre></div><div class='docblock'><p>GraphicsMode</p>
+</div>
+                    <h2 id='methods' class='small-section-header'>
+                      Methods<a href='#methods' class='anchor'></a>
+                    </h2>
+                <h3 id='impl' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl&lt;DI&gt; <a class="struct" href="../../../ssd1306/mode/graphics/struct.GraphicsMode.html" title="struct ssd1306::mode::graphics::GraphicsMode">GraphicsMode</a>&lt;DI&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;DI: <a class="trait" href="../../../ssd1306/interface/trait.DisplayInterface.html" title="trait ssd1306::interface::DisplayInterface">DisplayInterface</a>,&nbsp;</span></code><a href='#impl' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/ssd1306/mode/graphics.rs.html#22-130' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.new' class="method"><span id='new.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.new' class='fnname'>new</a>(properties: <a class="struct" href="../../../ssd1306/properties/struct.DisplayProperties.html" title="struct ssd1306::properties::DisplayProperties">DisplayProperties</a>&lt;DI&gt;) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/ssd1306/mode/graphics.rs.html#27-32' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Create new GraphicsMode instance</p>
+</div><h4 id='method.clear' class="method"><span id='clear.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.clear' class='fnname'>clear</a>(&amp;mut self)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/ssd1306/mode/graphics.rs.html#35-37' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Clear the display buffer. You need to call <code>disp.flush()</code> for any effect on the screen</p>
+</div><h4 id='method.reset' class="method"><span id='reset.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.reset' class='fnname'>reset</a>&lt;RST, DELAY&gt;(&amp;mut self, rst: &amp;mut RST, delay: &amp;mut DELAY) <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;RST: <a class="trait" href="../../../embedded_hal/digital/trait.OutputPin.html" title="trait embedded_hal::digital::OutputPin">OutputPin</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;DELAY: <a class="trait" href="../../../embedded_hal/blocking/delay/trait.DelayMs.html" title="trait embedded_hal::blocking::delay::DelayMs">DelayMs</a>&lt;u8&gt;,&nbsp;</span></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/ssd1306/mode/graphics.rs.html#41-51' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Reset display</p>
+</div><h4 id='method.flush' class="method"><span id='flush.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.flush' class='fnname'>flush</a>(&amp;mut self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;(), DI::<a class="type" href="../../../ssd1306/interface/trait.DisplayInterface.html#associatedtype.Error" title="type ssd1306::interface::DisplayInterface::Error">Error</a>&gt;</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/ssd1306/mode/graphics.rs.html#54-68' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Write out data to display</p>
+</div><h4 id='method.set_pixel' class="method"><span id='set_pixel.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.set_pixel' class='fnname'>set_pixel</a>(&amp;mut self, x: u32, y: u32, value: u8)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/ssd1306/mode/graphics.rs.html#72-112' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Turn a pixel on or off. A non-zero <code>value</code> is treated as on, <code>0</code> as off. If the X and Y
+coordinates are out of the bounds of the display, this method call is a noop.</p>
+</div><h4 id='method.init' class="method"><span id='init.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.init' class='fnname'>init</a>(&amp;mut self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;(), DI::<a class="type" href="../../../ssd1306/interface/trait.DisplayInterface.html#associatedtype.Error" title="type ssd1306::interface::DisplayInterface::Error">Error</a>&gt;</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/ssd1306/mode/graphics.rs.html#116-119' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Display is set up in column mode, i.e. a byte walks down a column of 8 pixels from
+column 0 on the left, to column <em>n</em> on the right</p>
+</div><h4 id='method.get_dimensions' class="method"><span id='get_dimensions.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.get_dimensions' class='fnname'>get_dimensions</a>(&amp;self) -&gt; (u8, u8)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/ssd1306/mode/graphics.rs.html#122-124' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Get display dimensions, taking into account the current rotation of the display</p>
+</div><h4 id='method.set_rotation' class="method"><span id='set_rotation.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.set_rotation' class='fnname'>set_rotation</a>(&amp;mut self, rot: <a class="enum" href="../../../ssd1306/displayrotation/enum.DisplayRotation.html" title="enum ssd1306::displayrotation::DisplayRotation">DisplayRotation</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;(), DI::<a class="type" href="../../../ssd1306/interface/trait.DisplayInterface.html#associatedtype.Error" title="type ssd1306::interface::DisplayInterface::Error">Error</a>&gt;</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/ssd1306/mode/graphics.rs.html#127-129' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Set the display rotation</p>
+</div></div>
+            <h2 id='implementations' class='small-section-header'>
+              Trait Implementations<a href='#implementations' class='anchor'></a>
+            </h2>
+            <div id='implementations-list'>
+        <h3 id='impl-Drawing' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl&lt;DI&gt; <a class="trait" href="../../../embedded_graphics/trait.Drawing.html" title="trait embedded_graphics::Drawing">Drawing</a> for <a class="struct" href="../../../ssd1306/mode/graphics/struct.GraphicsMode.html" title="struct ssd1306::mode::graphics::GraphicsMode">GraphicsMode</a>&lt;DI&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;DI: <a class="trait" href="../../../ssd1306/interface/trait.DisplayInterface.html" title="trait ssd1306::interface::DisplayInterface">DisplayInterface</a>,&nbsp;</span></code><a href='#impl-Drawing' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/ssd1306/mode/graphics.rs.html#140-152' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.draw' class="method"><span id='draw.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../../../embedded_graphics/trait.Drawing.html#tymethod.draw' class='fnname'>draw</a>&lt;T&gt;(&amp;mut self, item_pixels: T) <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: <a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/iterator/trait.Iterator.html" title="trait core::iter::iterator::Iterator">Iterator</a>&lt;Item = <a class="type" href="../../../embedded_graphics/drawable/type.Pixel.html" title="type embedded_graphics::drawable::Pixel">Pixel</a>&gt;,&nbsp;</span></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/ssd1306/mode/graphics.rs.html#144-151' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Draw an object from an iterator over its pixels</p>
+</div></div></div>
+                <h2 id='synthetic-implementations' class='small-section-header'>
+                  Auto Trait Implementations<a href='#synthetic-implementations' class='anchor'></a>
+                </h2>
+                <div id='synthetic-implementations-list'>
+            <h3 id='impl-Send' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl&lt;DI&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> for <a class="struct" href="../../../ssd1306/mode/graphics/struct.GraphicsMode.html" title="struct ssd1306::mode::graphics::GraphicsMode">GraphicsMode</a>&lt;DI&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;DI: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a>,&nbsp;</span></code><a href='#impl-Send' class='anchor'></a></span></td><td><span class='out-of-band'></span></td></tr></tbody></table></h3><div class='impl-items'></div><h3 id='impl-Sync' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl&lt;DI&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html" title="trait core::marker::Sync">Sync</a> for <a class="struct" href="../../../ssd1306/mode/graphics/struct.GraphicsMode.html" title="struct ssd1306::mode::graphics::GraphicsMode">GraphicsMode</a>&lt;DI&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;DI: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html" title="trait core::marker::Sync">Sync</a>,&nbsp;</span></code><a href='#impl-Sync' class='anchor'></a></span></td><td><span class='out-of-band'></span></td></tr></tbody></table></h3><div class='impl-items'></div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt><kbd>?</kbd></dt>
+                    <dd>Show this help dialog</dd>
+                    <dt><kbd>S</kbd></dt>
+                    <dd>Focus the search field</dd>
+                    <dt><kbd>↑</kbd></dt>
+                    <dd>Move up in search results</dd>
+                    <dt><kbd>↓</kbd></dt>
+                    <dd>Move down in search results</dd>
+                    <dt><kbd>↹</kbd></dt>
+                    <dd>Switch tab</dd>
+                    <dt><kbd>&#9166;</kbd></dt>
+                    <dd>Go to active search result</dd>
+                    <dt><kbd>+</kbd></dt>
+                    <dd>Expand all sections</dd>
+                    <dt><kbd>-</kbd></dt>
+                    <dd>Collapse all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../";
+        window.currentCrate = "ssd1306";
+    </script>
+    <script src="../../../main.js"></script>
+    <script defer src="../../../search-index.js"></script>
+</body>
+</html>
