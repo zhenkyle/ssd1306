@@ -290,7 +290,7 @@
     }
 
     <span class="doccomment">/// Write out data to display</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flush</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DI</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flush</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), ()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">display_size</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">get_size</span>();
         <span class="kw">let</span> <span class="ident">iface</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">borrow_iface_mut</span>();
 
@@ -352,7 +352,7 @@
 
     <span class="doccomment">/// Display is set up in column mode, i.e. a byte walks down a column of 8 pixels from</span>
     <span class="doccomment">/// column 0 on the left, to column _n_ on the right</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">init</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DI</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">init</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), ()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">init_column_mode</span>()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
@@ -363,7 +363,7 @@
     }
 
     <span class="doccomment">/// Set the display rotation</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_rotation</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">rot</span>: <span class="ident">DisplayRotation</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DI</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_rotation</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">rot</span>: <span class="ident">DisplayRotation</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), ()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">set_rotation</span>(<span class="ident">rot</span>)
     }
 }
