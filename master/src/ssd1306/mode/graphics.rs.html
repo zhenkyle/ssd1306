@@ -221,16 +221,11 @@
 <span id="164">164</span>
 <span id="165">165</span>
 <span id="166">166</span>
-<span id="167">167</span>
-<span id="168">168</span>
-<span id="169">169</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! Buffered display module for use with the embedded_graphics crate</span>
 
 <span class="kw">use</span> <span class="ident">hal</span>::<span class="ident">blocking</span>::<span class="ident">delay</span>::<span class="ident">DelayMs</span>;
 <span class="kw">use</span> <span class="ident">hal</span>::<span class="ident">digital</span>::<span class="ident">OutputPin</span>;
-
-<span class="kw">use</span> <span class="ident">command</span>::<span class="ident">Command</span>;
 
 <span class="kw">use</span> <span class="ident">displayrotation</span>::<span class="ident">DisplayRotation</span>;
 <span class="kw">use</span> <span class="ident">displaysize</span>::<span class="ident">DisplaySize</span>;
@@ -292,17 +287,16 @@
     <span class="doccomment">/// Write out data to display</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flush</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), ()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">display_size</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">get_size</span>();
-        <span class="kw">let</span> <span class="ident">iface</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">borrow_iface_mut</span>();
 
+        <span class="comment">// Ensure the display buffer is at the origin of the display before we send the full frame</span>
+        <span class="comment">// to prevent accidental offsets</span>
         <span class="kw">let</span> (<span class="ident">display_width</span>, <span class="ident">display_height</span>) <span class="op">=</span> <span class="ident">display_size</span>.<span class="ident">dimensions</span>();
-
-        <span class="ident">Command</span>::<span class="ident">ColumnAddress</span>(<span class="number">0</span>, <span class="ident">display_width</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">send</span>(<span class="ident">iface</span>)<span class="question-mark">?</span>;
-        <span class="ident">Command</span>::<span class="ident">PageAddress</span>(<span class="number">0</span>.<span class="ident">into</span>(), (<span class="ident">display_height</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">into</span>()).<span class="ident">send</span>(<span class="ident">iface</span>)<span class="question-mark">?</span>;
+        <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">set_draw_area</span>((<span class="number">0</span>, <span class="ident">display_width</span>), (<span class="number">0</span>, <span class="ident">display_height</span>))<span class="question-mark">?</span>;
 
         <span class="kw">match</span> <span class="ident">display_size</span> {
-            <span class="ident">DisplaySize</span>::<span class="ident">Display128x64</span> <span class="op">=&gt;</span> <span class="ident">iface</span>.<span class="ident">send_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">buffer</span>),
-            <span class="ident">DisplaySize</span>::<span class="ident">Display128x32</span> <span class="op">=&gt;</span> <span class="ident">iface</span>.<span class="ident">send_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">buffer</span>[<span class="number">0</span>..<span class="number">512</span>]),
-            <span class="ident">DisplaySize</span>::<span class="ident">Display96x16</span> <span class="op">=&gt;</span> <span class="ident">iface</span>.<span class="ident">send_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">buffer</span>[<span class="number">0</span>..<span class="number">192</span>]),
+            <span class="ident">DisplaySize</span>::<span class="ident">Display128x64</span> <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">draw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">buffer</span>),
+            <span class="ident">DisplaySize</span>::<span class="ident">Display128x32</span> <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">draw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">buffer</span>[<span class="number">0</span>..<span class="number">512</span>]),
+            <span class="ident">DisplaySize</span>::<span class="ident">Display96x16</span> <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">properties</span>.<span class="ident">draw</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">buffer</span>[<span class="number">0</span>..<span class="number">192</span>]),
         }
     }
 
