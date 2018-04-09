@@ -93,11 +93,8 @@
 <span id="36">36</span>
 <span id="37">37</span>
 <span id="38">38</span>
-<span id="39">39</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! Abstraction of different operating modes for the SSD1306</span>
-
-<span class="kw">use</span> <span class="kw">super</span>::<span class="ident">raw</span>::<span class="ident">RawMode</span>;
 
 <span class="kw">use</span> <span class="ident">interface</span>::<span class="ident">DisplayInterface</span>;
 <span class="kw">use</span> <span class="ident">properties</span>::<span class="ident">DisplayProperties</span>;
@@ -115,12 +112,13 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">MODE</span><span class="op">&gt;</span> <span class="ident">DisplayMode</span><span class="op">&lt;</span><span class="ident">MODE</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Setup display to run in raw mode</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>(<span class="ident">properties</span>: <span class="ident">DisplayProperties</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">DisplayMode</span><span class="op">&lt;</span><span class="ident">RawMode</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;&gt;</span>
+    <span class="doccomment">/// Setup display to run in requested mode</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>(<span class="ident">properties</span>: <span class="ident">DisplayProperties</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="ident">DI</span>: <span class="ident">DisplayInterface</span>,
+        <span class="ident">MODE</span>: <span class="ident">DisplayModeTrait</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>,
     {
-        <span class="ident">DisplayMode</span>(<span class="ident">RawMode</span>::<span class="ident">new</span>(<span class="ident">properties</span>))
+        <span class="ident">DisplayMode</span>(<span class="ident">MODE</span>::<span class="ident">new</span>(<span class="ident">properties</span>))
     }
 
     <span class="doccomment">/// Change into any mode implementing DisplayModeTrait</span>

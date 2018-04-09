@@ -130,6 +130,16 @@
 <span id="73">73</span>
 <span id="74">74</span>
 <span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! Interface factory</span>
 
@@ -149,6 +159,12 @@
     <span class="ident">display_size</span>: <span class="ident">DisplaySize</span>,
     <span class="ident">rotation</span>: <span class="ident">DisplayRotation</span>,
     <span class="ident">i2c_addr</span>: <span class="ident">u8</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Builder</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span>::<span class="ident">new</span>()
+    }
 }
 
 <span class="kw">impl</span> <span class="ident">Builder</span> {
@@ -196,7 +212,11 @@
     }
 
     <span class="doccomment">/// Create spi communication interface</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connect_spi</span><span class="op">&lt;</span><span class="ident">SPI</span>, <span class="ident">DC</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">spi</span>: <span class="ident">SPI</span>, <span class="ident">dc</span>: <span class="ident">DC</span>) <span class="op">-&gt;</span> <span class="ident">DisplayMode</span><span class="op">&lt;</span><span class="ident">RawMode</span><span class="op">&lt;</span><span class="ident">SpiInterface</span><span class="op">&lt;</span><span class="ident">SPI</span>, <span class="ident">DC</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connect_spi</span><span class="op">&lt;</span><span class="ident">SPI</span>, <span class="ident">DC</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">spi</span>: <span class="ident">SPI</span>,
+        <span class="ident">dc</span>: <span class="ident">DC</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">DisplayMode</span><span class="op">&lt;</span><span class="ident">RawMode</span><span class="op">&lt;</span><span class="ident">SpiInterface</span><span class="op">&lt;</span><span class="ident">SPI</span>, <span class="ident">DC</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">SPI</span>: <span class="ident">hal</span>::<span class="ident">blocking</span>::<span class="ident">spi</span>::<span class="ident">Transfer</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">hal</span>::<span class="ident">blocking</span>::<span class="ident">spi</span>::<span class="ident">Write</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
         <span class="ident">DC</span>: <span class="ident">OutputPin</span>,
