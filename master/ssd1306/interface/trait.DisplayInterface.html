@@ -55,11 +55,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content"><h1 class='fqn'><span class='in-band'>Trait <a href='../index.html'>ssd1306</a>::<wbr><a href='index.html'>interface</a>::<wbr><a class="trait" href=''>DisplayInterface</a></span><span class='out-of-band'><span id='render-detail'>
-                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                       [<span class='inner'>&#x2212;</span>]
-                   </a>
-               </span><a class='srclink' href='../../src/ssd1306/interface/mod.rs.html#7-12' title='goto source code'>[src]</a></span></h1><div class="docblock type-decl"><pre class='rust trait'>pub trait DisplayInterface {
+    <section id='main' class="content"><h1 class='fqn'><span class='in-band'>Trait <a href='../index.html'>ssd1306</a>::<wbr><a href='index.html'>interface</a>::<wbr><a class="trait" href=''>DisplayInterface</a></span><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../src/ssd1306/interface/mod.rs.html#7-12' title='goto source code'>[src]</a></span></h1><div class="docblock type-decl"><pre class='rust trait'>pub trait DisplayInterface {
     fn <a href='#tymethod.send_command' class='fnname'>send_command</a>(&amp;mut self, cmd: u8) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;(), ()&gt;;
 <div class='item-spacer'></div>    fn <a href='#tymethod.send_data' class='fnname'>send_data</a>(&amp;mut self, buf: &amp;[u8]) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;(), ()&gt;;
 }</pre></div><div class='docblock'><p>A method of communicating with SSD1306</p>

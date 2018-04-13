@@ -55,11 +55,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content"><h1 class='fqn'><span class='in-band'>Trait <a href='../../index.html'>embedded_hal</a>::<wbr><a href='../index.html'>blocking</a>::<wbr><a href='index.html'>i2c</a>::<wbr><a class="trait" href=''>WriteRead</a></span><span class='out-of-band'><span id='render-detail'>
-                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                       [<span class='inner'>&#x2212;</span>]
-                   </a>
-               </span><a class='srclink' href='../../../src/embedded_hal/blocking/i2c.rs.html#54-86' title='goto source code'>[src]</a></span></h1><div class="docblock type-decl"><pre class='rust trait'>pub trait WriteRead {
+    <section id='main' class="content"><h1 class='fqn'><span class='in-band'>Trait <a href='../../index.html'>embedded_hal</a>::<wbr><a href='../index.html'>blocking</a>::<wbr><a href='index.html'>i2c</a>::<wbr><a class="trait" href=''>WriteRead</a></span><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../../src/embedded_hal/blocking/i2c.rs.html#54-86' title='goto source code'>[src]</a></span></h1><div class="docblock type-decl"><pre class='rust trait'>pub trait WriteRead {
     type <a href='#associatedtype.Error' class="type">Error</a>;
     fn <a href='#tymethod.write_read' class='fnname'>write_read</a>(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;mut self, <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;address: u8, <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bytes: &amp;[u8], <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buffer: &amp;mut [u8]<br>&nbsp;&nbsp;&nbsp;&nbsp;) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;(), Self::<a class="type" href="../../../embedded_hal/blocking/i2c/trait.WriteRead.html#associatedtype.Error" title="type embedded_hal::blocking::i2c::WriteRead::Error">Error</a>&gt;;
 }</pre></div><div class='docblock'><p>Blocking write + read</p>

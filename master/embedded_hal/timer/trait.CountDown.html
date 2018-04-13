@@ -55,11 +55,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content"><h1 class='fqn'><span class='in-band'>Trait <a href='../index.html'>embedded_hal</a>::<wbr><a href='index.html'>timer</a>::<wbr><a class="trait" href=''>CountDown</a></span><span class='out-of-band'><span id='render-detail'>
-                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                       [<span class='inner'>&#x2212;</span>]
-                   </a>
-               </span><a class='srclink' href='../../src/embedded_hal/timer.rs.html#58-76' title='goto source code'>[src]</a></span></h1><div class="docblock type-decl"><pre class='rust trait'>pub trait CountDown {
+    <section id='main' class="content"><h1 class='fqn'><span class='in-band'>Trait <a href='../index.html'>embedded_hal</a>::<wbr><a href='index.html'>timer</a>::<wbr><a class="trait" href=''>CountDown</a></span><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../src/embedded_hal/timer.rs.html#58-76' title='goto source code'>[src]</a></span></h1><div class="docblock type-decl"><pre class='rust trait'>pub trait CountDown {
     type <a href='#associatedtype.Time' class="type">Time</a>;
     fn <a href='#tymethod.start' class='fnname'>start</a>&lt;T&gt;(&amp;mut self, count: T)<br>&nbsp;&nbsp;&nbsp; <span class="where">where<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;Self::<a class="type" href="../../embedded_hal/timer/trait.CountDown.html#associatedtype.Time" title="type embedded_hal::timer::CountDown::Time">Time</a>&gt;</span>;
 <div class='item-spacer'></div>    fn <a href='#tymethod.wait' class='fnname'>wait</a>(&amp;mut self) -&gt; <a class="type" href="../../nb/type.Result.html" title="type nb::Result">Result</a>&lt;(), !&gt;;
