@@ -266,29 +266,6 @@
 <span id="266">266</span>
 <span id="267">267</span>
 <span id="268">268</span>
-<span id="269">269</span>
-<span id="270">270</span>
-<span id="271">271</span>
-<span id="272">272</span>
-<span id="273">273</span>
-<span id="274">274</span>
-<span id="275">275</span>
-<span id="276">276</span>
-<span id="277">277</span>
-<span id="278">278</span>
-<span id="279">279</span>
-<span id="280">280</span>
-<span id="281">281</span>
-<span id="282">282</span>
-<span id="283">283</span>
-<span id="284">284</span>
-<span id="285">285</span>
-<span id="286">286</span>
-<span id="287">287</span>
-<span id="288">288</span>
-<span id="289">289</span>
-<span id="290">290</span>
-<span id="291">291</span>
 </pre><pre class="rust ">
 <span class="comment">// Shamefully taken from https://github.com/EdgewaterDevelopment/rust-ssd1306</span>
 
@@ -380,21 +357,14 @@
     <span class="kw">where</span>
         <span class="ident">DI</span>: <span class="ident">DisplayInterface</span>,
     {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Command</span>::<span class="ident">Contrast</span>(<span class="ident">val</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0x81</span>, <span class="ident">val</span>])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">AllOn</span>(<span class="ident">on</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0xA4</span> <span class="op">|</span> (<span class="ident">on</span> <span class="kw">as</span> <span class="ident">u8</span>)])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">Invert</span>(<span class="ident">inv</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0xA6</span> <span class="op">|</span> (<span class="ident">inv</span> <span class="kw">as</span> <span class="ident">u8</span>)])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">DisplayOn</span>(<span class="ident">on</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0xAE</span> <span class="op">|</span> (<span class="ident">on</span> <span class="kw">as</span> <span class="ident">u8</span>)])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">HScrollSetup</span>(<span class="ident">dir</span>, <span class="ident">start</span>, <span class="ident">end</span>, <span class="ident">rate</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[
+        <span class="comment">// Transform command into a fixed size array of 7 u8 and the real length for sending</span>
+        <span class="kw">let</span> (<span class="ident">data</span>, <span class="ident">len</span>) <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident">Command</span>::<span class="ident">Contrast</span>(<span class="ident">val</span>) <span class="op">=&gt;</span> ([<span class="number">0x81</span>, <span class="ident">val</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">2</span>),
+            <span class="ident">Command</span>::<span class="ident">AllOn</span>(<span class="ident">on</span>) <span class="op">=&gt;</span> ([<span class="number">0xA4</span> <span class="op">|</span> (<span class="ident">on</span> <span class="kw">as</span> <span class="ident">u8</span>), <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">1</span>),
+            <span class="ident">Command</span>::<span class="ident">Invert</span>(<span class="ident">inv</span>) <span class="op">=&gt;</span> ([<span class="number">0xA6</span> <span class="op">|</span> (<span class="ident">inv</span> <span class="kw">as</span> <span class="ident">u8</span>), <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">1</span>),
+            <span class="ident">Command</span>::<span class="ident">DisplayOn</span>(<span class="ident">on</span>) <span class="op">=&gt;</span> ([<span class="number">0xAE</span> <span class="op">|</span> (<span class="ident">on</span> <span class="kw">as</span> <span class="ident">u8</span>), <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">1</span>),
+            <span class="ident">Command</span>::<span class="ident">HScrollSetup</span>(<span class="ident">dir</span>, <span class="ident">start</span>, <span class="ident">end</span>, <span class="ident">rate</span>) <span class="op">=&gt;</span> (
+                [
                     <span class="number">0x26</span> <span class="op">|</span> (<span class="ident">dir</span> <span class="kw">as</span> <span class="ident">u8</span>),
                     <span class="number">0</span>,
                     <span class="ident">start</span> <span class="kw">as</span> <span class="ident">u8</span>,
@@ -402,76 +372,60 @@
                     <span class="ident">end</span> <span class="kw">as</span> <span class="ident">u8</span>,
                     <span class="number">0</span>,
                     <span class="number">0xFF</span>,
-                ])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">VHScrollSetup</span>(<span class="ident">dir</span>, <span class="ident">start</span>, <span class="ident">end</span>, <span class="ident">rate</span>, <span class="ident">offset</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[
+                ],
+                <span class="number">7</span>,
+            ),
+            <span class="ident">Command</span>::<span class="ident">VHScrollSetup</span>(<span class="ident">dir</span>, <span class="ident">start</span>, <span class="ident">end</span>, <span class="ident">rate</span>, <span class="ident">offset</span>) <span class="op">=&gt;</span> (
+                [
                     <span class="number">0x28</span> <span class="op">|</span> (<span class="ident">dir</span> <span class="kw">as</span> <span class="ident">u8</span>),
                     <span class="number">0</span>,
                     <span class="ident">start</span> <span class="kw">as</span> <span class="ident">u8</span>,
                     <span class="ident">rate</span> <span class="kw">as</span> <span class="ident">u8</span>,
                     <span class="ident">end</span> <span class="kw">as</span> <span class="ident">u8</span>,
                     <span class="ident">offset</span>,
-                ])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">EnableScroll</span>(<span class="ident">en</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0x2E</span> <span class="op">|</span> (<span class="ident">en</span> <span class="kw">as</span> <span class="ident">u8</span>)])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">VScrollArea</span>(<span class="ident">above</span>, <span class="ident">lines</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0xA3</span>, <span class="ident">above</span>, <span class="ident">lines</span>])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">LowerColStart</span>(<span class="ident">addr</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0xF</span> <span class="op">&amp;</span> <span class="ident">addr</span>])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">UpperColStart</span>(<span class="ident">addr</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0x1F</span> <span class="op">&amp;</span> <span class="ident">addr</span>])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">AddressMode</span>(<span class="ident">mode</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0x20</span>, <span class="ident">mode</span> <span class="kw">as</span> <span class="ident">u8</span>])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">ColumnAddress</span>(<span class="ident">start</span>, <span class="ident">end</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0x21</span>, <span class="ident">start</span>, <span class="ident">end</span>])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">PageAddress</span>(<span class="ident">start</span>, <span class="ident">end</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0x22</span>, <span class="ident">start</span> <span class="kw">as</span> <span class="ident">u8</span>, <span class="ident">end</span> <span class="kw">as</span> <span class="ident">u8</span>])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">PageStart</span>(<span class="ident">page</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0xB0</span> <span class="op">|</span> (<span class="ident">page</span> <span class="kw">as</span> <span class="ident">u8</span>)])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">StartLine</span>(<span class="ident">line</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0x40</span> <span class="op">|</span> (<span class="number">0x3F</span> <span class="op">&amp;</span> <span class="ident">line</span>)])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">SegmentRemap</span>(<span class="ident">remap</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0xA0</span> <span class="op">|</span> (<span class="ident">remap</span> <span class="kw">as</span> <span class="ident">u8</span>)])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">Multiplex</span>(<span class="ident">ratio</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0xA8</span>, <span class="ident">ratio</span>])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">ReverseComDir</span>(<span class="ident">rev</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0xC0</span> <span class="op">|</span> ((<span class="ident">rev</span> <span class="kw">as</span> <span class="ident">u8</span>) <span class="op">&lt;&lt;</span> <span class="number">3</span>)])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">DisplayOffset</span>(<span class="ident">offset</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0xD3</span>, <span class="ident">offset</span>])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">ComPinConfig</span>(<span class="ident">alt</span>, <span class="ident">lr</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0xDA</span>, <span class="number">0x2</span> <span class="op">|</span> ((<span class="ident">alt</span> <span class="kw">as</span> <span class="ident">u8</span>) <span class="op">&lt;&lt;</span> <span class="number">4</span>) <span class="op">|</span> ((<span class="ident">lr</span> <span class="kw">as</span> <span class="ident">u8</span>) <span class="op">&lt;&lt;</span> <span class="number">5</span>)])<span class="question-mark">?</span>;
-            }
+                    <span class="number">0</span>,
+                ],
+                <span class="number">6</span>,
+            ),
+            <span class="ident">Command</span>::<span class="ident">EnableScroll</span>(<span class="ident">en</span>) <span class="op">=&gt;</span> ([<span class="number">0x2E</span> <span class="op">|</span> (<span class="ident">en</span> <span class="kw">as</span> <span class="ident">u8</span>), <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">1</span>),
+            <span class="ident">Command</span>::<span class="ident">VScrollArea</span>(<span class="ident">above</span>, <span class="ident">lines</span>) <span class="op">=&gt;</span> ([<span class="number">0xA3</span>, <span class="ident">above</span>, <span class="ident">lines</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">3</span>),
+            <span class="ident">Command</span>::<span class="ident">LowerColStart</span>(<span class="ident">addr</span>) <span class="op">=&gt;</span> ([<span class="number">0xF</span> <span class="op">&amp;</span> <span class="ident">addr</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">1</span>),
+            <span class="ident">Command</span>::<span class="ident">UpperColStart</span>(<span class="ident">addr</span>) <span class="op">=&gt;</span> ([<span class="number">0x1F</span> <span class="op">&amp;</span> <span class="ident">addr</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">1</span>),
+            <span class="ident">Command</span>::<span class="ident">AddressMode</span>(<span class="ident">mode</span>) <span class="op">=&gt;</span> ([<span class="number">0x20</span>, <span class="ident">mode</span> <span class="kw">as</span> <span class="ident">u8</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">2</span>),
+            <span class="ident">Command</span>::<span class="ident">ColumnAddress</span>(<span class="ident">start</span>, <span class="ident">end</span>) <span class="op">=&gt;</span> ([<span class="number">0x21</span>, <span class="ident">start</span>, <span class="ident">end</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">3</span>),
+            <span class="ident">Command</span>::<span class="ident">PageAddress</span>(<span class="ident">start</span>, <span class="ident">end</span>) <span class="op">=&gt;</span> ([<span class="number">0x22</span>, <span class="ident">start</span> <span class="kw">as</span> <span class="ident">u8</span>, <span class="ident">end</span> <span class="kw">as</span> <span class="ident">u8</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">3</span>),
+            <span class="ident">Command</span>::<span class="ident">PageStart</span>(<span class="ident">page</span>) <span class="op">=&gt;</span> ([<span class="number">0xB0</span> <span class="op">|</span> (<span class="ident">page</span> <span class="kw">as</span> <span class="ident">u8</span>), <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">1</span>),
+            <span class="ident">Command</span>::<span class="ident">StartLine</span>(<span class="ident">line</span>) <span class="op">=&gt;</span> ([<span class="number">0x40</span> <span class="op">|</span> (<span class="number">0x3F</span> <span class="op">&amp;</span> <span class="ident">line</span>), <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">1</span>),
+            <span class="ident">Command</span>::<span class="ident">SegmentRemap</span>(<span class="ident">remap</span>) <span class="op">=&gt;</span> ([<span class="number">0xA0</span> <span class="op">|</span> (<span class="ident">remap</span> <span class="kw">as</span> <span class="ident">u8</span>), <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">1</span>),
+            <span class="ident">Command</span>::<span class="ident">Multiplex</span>(<span class="ident">ratio</span>) <span class="op">=&gt;</span> ([<span class="number">0xA8</span>, <span class="ident">ratio</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">2</span>),
+            <span class="ident">Command</span>::<span class="ident">ReverseComDir</span>(<span class="ident">rev</span>) <span class="op">=&gt;</span> ([<span class="number">0xC0</span> <span class="op">|</span> ((<span class="ident">rev</span> <span class="kw">as</span> <span class="ident">u8</span>) <span class="op">&lt;&lt;</span> <span class="number">3</span>), <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">1</span>),
+            <span class="ident">Command</span>::<span class="ident">DisplayOffset</span>(<span class="ident">offset</span>) <span class="op">=&gt;</span> ([<span class="number">0xD3</span>, <span class="ident">offset</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">2</span>),
+            <span class="ident">Command</span>::<span class="ident">ComPinConfig</span>(<span class="ident">alt</span>, <span class="ident">lr</span>) <span class="op">=&gt;</span> (
+                [
+                    <span class="number">0xDA</span>,
+                    <span class="number">0x2</span> <span class="op">|</span> ((<span class="ident">alt</span> <span class="kw">as</span> <span class="ident">u8</span>) <span class="op">&lt;&lt;</span> <span class="number">4</span>) <span class="op">|</span> ((<span class="ident">lr</span> <span class="kw">as</span> <span class="ident">u8</span>) <span class="op">&lt;&lt;</span> <span class="number">5</span>),
+                    <span class="number">0</span>,
+                    <span class="number">0</span>,
+                    <span class="number">0</span>,
+                    <span class="number">0</span>,
+                    <span class="number">0</span>,
+                ],
+                <span class="number">2</span>,
+            ),
             <span class="ident">Command</span>::<span class="ident">DisplayClockDiv</span>(<span class="ident">fosc</span>, <span class="ident">div</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0xD5</span>, ((<span class="number">0xF</span> <span class="op">&amp;</span> <span class="ident">fosc</span>) <span class="op">&lt;&lt;</span> <span class="number">4</span>) <span class="op">|</span> (<span class="number">0xF</span> <span class="op">&amp;</span> <span class="ident">div</span>)])<span class="question-mark">?</span>;
+                ([<span class="number">0xD5</span>, ((<span class="number">0xF</span> <span class="op">&amp;</span> <span class="ident">fosc</span>) <span class="op">&lt;&lt;</span> <span class="number">4</span>) <span class="op">|</span> (<span class="number">0xF</span> <span class="op">&amp;</span> <span class="ident">div</span>), <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">2</span>)
             }
-            <span class="ident">Command</span>::<span class="ident">PreChargePeriod</span>(<span class="ident">phase1</span>, <span class="ident">phase2</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0xD9</span>, ((<span class="number">0xF</span> <span class="op">&amp;</span> <span class="ident">phase2</span>) <span class="op">&lt;&lt;</span> <span class="number">4</span>) <span class="op">|</span> (<span class="number">0xF</span> <span class="op">&amp;</span> <span class="ident">phase1</span>)])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">VcomhDeselect</span>(<span class="ident">level</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0xDB</span>, (<span class="ident">level</span> <span class="kw">as</span> <span class="ident">u8</span>) <span class="op">&lt;&lt;</span> <span class="number">4</span>])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">Noop</span> <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0xE3</span>])<span class="question-mark">?</span>;
-            }
-            <span class="ident">Command</span>::<span class="ident">ChargePump</span>(<span class="ident">en</span>) <span class="op">=&gt;</span> {
-                <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span>[<span class="number">0x8D</span>, <span class="number">0x10</span> <span class="op">|</span> ((<span class="ident">en</span> <span class="kw">as</span> <span class="ident">u8</span>) <span class="op">&lt;&lt;</span> <span class="number">2</span>)])<span class="question-mark">?</span>;
-            }
-        }
+            <span class="ident">Command</span>::<span class="ident">PreChargePeriod</span>(<span class="ident">phase1</span>, <span class="ident">phase2</span>) <span class="op">=&gt;</span> (
+                [<span class="number">0xD9</span>, ((<span class="number">0xF</span> <span class="op">&amp;</span> <span class="ident">phase2</span>) <span class="op">&lt;&lt;</span> <span class="number">4</span>) <span class="op">|</span> (<span class="number">0xF</span> <span class="op">&amp;</span> <span class="ident">phase1</span>), <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],
+                <span class="number">2</span>,
+            ),
+            <span class="ident">Command</span>::<span class="ident">VcomhDeselect</span>(<span class="ident">level</span>) <span class="op">=&gt;</span> ([<span class="number">0xDB</span>, (<span class="ident">level</span> <span class="kw">as</span> <span class="ident">u8</span>) <span class="op">&lt;&lt;</span> <span class="number">4</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">2</span>),
+            <span class="ident">Command</span>::<span class="ident">Noop</span> <span class="op">=&gt;</span> ([<span class="number">0xE3</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">1</span>),
+            <span class="ident">Command</span>::<span class="ident">ChargePump</span>(<span class="ident">en</span>) <span class="op">=&gt;</span> ([<span class="number">0x8D</span>, <span class="number">0x10</span> <span class="op">|</span> ((<span class="ident">en</span> <span class="kw">as</span> <span class="ident">u8</span>) <span class="op">&lt;&lt;</span> <span class="number">2</span>), <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], <span class="number">2</span>),
+        };
+
+        <span class="comment">// Send command over the interface</span>
+        <span class="ident">iface</span>.<span class="ident">send_commands</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>[<span class="number">0</span>..<span class="ident">len</span>])<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(())
     }
