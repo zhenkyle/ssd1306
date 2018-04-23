@@ -131,8 +131,35 @@
 <span id="131">131</span>
 <span id="132">132</span>
 <span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
 </pre><pre class="rust ">
-<span class="doccomment">//! Module to handle common display properties</span>
+<span class="doccomment">//! Container to store and set display properties</span>
 
 <span class="kw">use</span> <span class="ident">command</span>::{<span class="ident">AddrMode</span>, <span class="ident">Command</span>, <span class="ident">VcomhLevel</span>};
 
@@ -141,7 +168,7 @@
 
 <span class="kw">use</span> <span class="ident">interface</span>::<span class="ident">DisplayInterface</span>;
 
-<span class="doccomment">/// DisplayProperties</span>
+<span class="doccomment">/// Display properties struct</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DisplayProperties</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span> {
     <span class="ident">iface</span>: <span class="ident">DI</span>,
     <span class="ident">display_size</span>: <span class="ident">DisplaySize</span>,
@@ -165,8 +192,8 @@
         }
     }
 
-    <span class="doccomment">/// Display is set up in column mode, i.e. a byte walks down a column of 8 pixels from</span>
-    <span class="doccomment">/// column 0 on the left, to column _n_ on the right</span>
+    <span class="doccomment">/// Initialise the display in column mode (i.e. a byte walks down a column of 8 pixels) with</span>
+    <span class="doccomment">/// column 0 on the left and column _(display_width - 1)_ on the right.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">init_column_mode</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), ()<span class="op">&gt;</span> {
         <span class="comment">// TODO: Break up into nice bits so display modes can pick whathever they need</span>
         <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">display_height</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">display_size</span>.<span class="ident">dimensions</span>();
@@ -223,8 +250,35 @@
         <span class="self">self</span>.<span class="ident">display_size</span>
     }
 
-    <span class="doccomment">/// Get display dimensions, taking into account the current rotation of the display</span>
     <span class="comment">// TODO: Replace (u8, u8) with a dimensioney type for consistency</span>
+    <span class="comment">// TOOD: Make doc tests work</span>
+    <span class="doccomment">/// Get display dimensions, taking into account the current rotation of the display</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # struct FakeInterface;</span>
+    <span class="doccomment">/// #</span>
+    <span class="doccomment">/// # impl DisplayInterface for FakeInterface {</span>
+    <span class="doccomment">/// #     fn send_command(&amp;mut self, cmd: u8) -&gt; Result&lt;(), ()&gt; { Ok(()) }</span>
+    <span class="doccomment">/// #     fn send_data(&amp;mut self, buf: &amp;[u8]) -&gt; Result&lt;(), ()&gt; { Ok(()) }</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// #</span>
+    <span class="doccomment">/// # let interface = FakeInterface {};</span>
+    <span class="doccomment">/// #</span>
+    <span class="doccomment">/// let disp = DisplayProperties::new(</span>
+    <span class="doccomment">///     interface,</span>
+    <span class="doccomment">///     DisplaySize::Display128x64,</span>
+    <span class="doccomment">///     DisplayRotation::Rotate0</span>
+    <span class="doccomment">/// );</span>
+    <span class="doccomment">/// assert_eq!(disp.get_dimensions(), (128, 64));</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # let interface = FakeInterface {};</span>
+    <span class="doccomment">/// let rotated_disp = DisplayProperties::new(</span>
+    <span class="doccomment">///     interface,</span>
+    <span class="doccomment">///     DisplaySize::Display128x64,</span>
+    <span class="doccomment">///     DisplayRotation::Rotate90</span>
+    <span class="doccomment">/// );</span>
+    <span class="doccomment">/// assert_eq!(rotated_disp.get_dimensions(), (64, 128));</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_dimensions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> (<span class="ident">u8</span>, <span class="ident">u8</span>) {
         <span class="kw">let</span> (<span class="ident">w</span>, <span class="ident">h</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">display_size</span>.<span class="ident">dimensions</span>();
 

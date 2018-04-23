@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["displaymode","Abstraction of different operating modes for the SSD1306"],["graphics","Buffered display module for use with the embedded_graphics crate"],["raw","A raw display mode"],["terminal","Terminal display module"]]});
+initSidebarItems({"mod":[["displaymode","Abstraction of different operating modes for the SSD1306"],["graphics","Buffered display module for use with the [embedded_graphics] crate"],["raw","Raw mode for coercion into richer driver types"],["terminal","Unbuffered terminal display mode"]]});

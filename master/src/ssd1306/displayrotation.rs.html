@@ -12,19 +12,21 @@
 <span id="12">12</span>
 <span id="13">13</span>
 <span id="14">14</span>
+<span id="15">15</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! Display rotation</span>
 
-<span class="doccomment">/// Display rotation enumeration</span>
+<span class="comment">// TODO: Add to prelude</span>
+<span class="doccomment">/// Display rotation</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DisplayRotation</span> {
     <span class="doccomment">/// No rotation, normal display</span>
     <span class="ident">Rotate0</span>,
     <span class="doccomment">/// Rotate by 90 degress clockwise</span>
     <span class="ident">Rotate90</span>,
-    <span class="doccomment">/// Rotate by 180 degress (flip)</span>
+    <span class="doccomment">/// Rotate by 180 degress clockwise</span>
     <span class="ident">Rotate180</span>,
-    <span class="doccomment">/// Rotate the display by 270 degress</span>
+    <span class="doccomment">/// Rotate 270 degress clockwise</span>
     <span class="ident">Rotate270</span>,
 }
 </pre>

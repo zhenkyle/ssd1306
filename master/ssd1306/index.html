@@ -1,4 +1,142 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `ssd1306` crate."><meta name="keywords" content="rust, rustlang, rust-lang, ssd1306"><title>ssd1306 - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Crate ssd1306</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#reexports">Re-exports</a></li><li><a href="#modules">Modules</a></li><li><a href="#enums">Enums</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'ssd1306', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='in-band'>Crate <a class="mod" href=''>ssd1306</a></span><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/ssd1306/lib.rs.html#1-27' title='goto source code'>[src]</a></span></h1><div class='docblock'><p>SSD1306 OLED display driver</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `ssd1306` crate."><meta name="keywords" content="rust, rustlang, rust-lang, ssd1306"><title>ssd1306 - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Crate ssd1306</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#reexports">Re-exports</a></li><li><a href="#modules">Modules</a></li><li><a href="#enums">Enums</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'ssd1306', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='in-band'>Crate <a class="mod" href=''>ssd1306</a></span><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/ssd1306/lib.rs.html#1-180' title='goto source code'>[src]</a></span></h1><div class='docblock'><p>SSD1306 OLED display driver</p>
+<p>The driver must be initialised by passing an I2C or SPI interface peripheral to the <a href="../ssd1306/builder/struct.Builder.html" title="`Builder`"><code>Builder</code></a>,
+which will in turn create a driver instance in a particular mode. By default, the builder
+returns a <a href="../ssd1306/mode/raw/struct.RawMode.html" title="`mode::RawMode`"><code>mode::RawMode</code></a> instance which isn't very useful by itself. You can coerce the driver
+into a more useful mode by calling <code>into()</code> and defining the type you want to coerce to. For
+example, to initialise the display with an I2C interface and <a href="../ssd1306/mode/graphics/struct.GraphicsMode.html" title="mode::GraphicsMode">mode::GraphicsMode</a>, you would do
+something like this:</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><pre class="rust rust-example-rendered ignore">
+<span class="kw">let</span> <span class="ident">i2c</span> <span class="op">=</span> <span class="ident">I2c</span>::<span class="ident">i2c1</span>(<span class="comment">/* snip */</span>);
+
+<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">disp</span>: <span class="ident">GraphicsMode</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Builder</span>::<span class="ident">new</span>().<span class="ident">connect_i2c</span>(<span class="ident">i2c</span>).<span class="ident">into</span>();
+<span class="ident">disp</span>.<span class="ident">init</span>();
+
+<span class="ident">disp</span>.<span class="ident">set_pixel</span>(<span class="number">10</span>, <span class="number">20</span>, <span class="number">1</span>);</pre>
+<p>See the <a href="https://github.com/jamwaffles/ssd1306/blob/master/examples/graphics_i2c.rs">example</a>
+for more usage. The <a href="https://github.com/jamwaffles/embedded-graphics#features">entire <code>embedded_graphics</code> featureset</a>
+is supported by this driver.</p>
+<p>There is also <a href="../ssd1306/mode/terminal/struct.TerminalMode.html" title="mode::TerminalMode">mode::TerminalMode</a> which allows drawing of characters to the display without
+using a display buffer:</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><pre class="rust rust-example-rendered ignore">
+<span class="kw">let</span> <span class="ident">i2c</span> <span class="op">=</span> <span class="ident">I2c</span>::<span class="ident">i2c1</span>(<span class="comment">/* snip */</span>);
+
+<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">disp</span>: <span class="ident">TerminalMode</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Builder</span>::<span class="ident">new</span>().<span class="ident">connect_i2c</span>(<span class="ident">i2c</span>).<span class="ident">into</span>();
+
+<span class="ident">disp</span>.<span class="ident">print_char</span>(<span class="string">&#39;A&#39;</span>);</pre>
+<p>See the <a href="https://github.com/jamwaffles/ssd1306/blob/master/examples/terminal_i2c.rs">example</a>
+for more usage.</p>
+<p>It's possible to customise the driver to suit your display/application. Take a look at the
+<a href="../ssd1306/builder/struct.Builder.html" title="Builder">Builder</a> for available options.</p>
+<h1 id="examples" class="section-header"><a href="#examples">Examples</a></h1>
+<p>Examples can be found in
+<a href="https://github.com/jamwaffles/ssd1306/blob/master/examples">the examples/ folder</a></p>
+<h2 id="write-text-to-the-display-without-a-framebuffer" class="section-header"><a href="#write-text-to-the-display-without-a-framebuffer">Write text to the display without a framebuffer</a></h2>
+<p>Uses <a href="../ssd1306/mode/terminal/struct.TerminalMode.html" title="mode::TerminalMode">mode::TerminalMode</a>.</p>
+
+<pre class="rust rust-example-rendered">
+<span class="attribute">#![<span class="ident">no_std</span>]</span>
+
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">cortex_m</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">embedded_hal</span> <span class="kw">as</span> <span class="ident">hal</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">panic_abort</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">ssd1306</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">stm32f103xx_hal</span> <span class="kw">as</span> <span class="ident">blue_pill</span>;
+
+<span class="kw">use</span> <span class="ident">blue_pill</span>::<span class="ident">i2c</span>::{<span class="ident">DutyCycle</span>, <span class="ident">I2c</span>, <span class="ident">Mode</span>};
+<span class="kw">use</span> <span class="ident">blue_pill</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="ident">core</span>::<span class="ident">fmt</span>::<span class="ident">Write</span>;
+<span class="kw">use</span> <span class="ident">ssd1306</span>::{<span class="ident">mode</span>::<span class="ident">TerminalMode</span>, <span class="ident">Builder</span>};
+
+<span class="kw">fn</span> <span class="ident">main</span>() {
+    <span class="kw">let</span> <span class="ident">dp</span> <span class="op">=</span> <span class="ident">blue_pill</span>::<span class="ident">stm32f103xx</span>::<span class="ident">Peripherals</span>::<span class="ident">take</span>().<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">flash</span> <span class="op">=</span> <span class="ident">dp</span>.<span class="ident">FLASH</span>.<span class="ident">constrain</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rcc</span> <span class="op">=</span> <span class="ident">dp</span>.<span class="ident">RCC</span>.<span class="ident">constrain</span>();
+    <span class="kw">let</span> <span class="ident">clocks</span> <span class="op">=</span> <span class="ident">rcc</span>.<span class="ident">cfgr</span>.<span class="ident">freeze</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">flash</span>.<span class="ident">acr</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">afio</span> <span class="op">=</span> <span class="ident">dp</span>.<span class="ident">AFIO</span>.<span class="ident">constrain</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rcc</span>.<span class="ident">apb2</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">gpiob</span> <span class="op">=</span> <span class="ident">dp</span>.<span class="ident">GPIOB</span>.<span class="ident">split</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rcc</span>.<span class="ident">apb2</span>);
+    <span class="kw">let</span> <span class="ident">scl</span> <span class="op">=</span> <span class="ident">gpiob</span>.<span class="ident">pb8</span>.<span class="ident">into_alternate_open_drain</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">gpiob</span>.<span class="ident">crh</span>);
+    <span class="kw">let</span> <span class="ident">sda</span> <span class="op">=</span> <span class="ident">gpiob</span>.<span class="ident">pb9</span>.<span class="ident">into_alternate_open_drain</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">gpiob</span>.<span class="ident">crh</span>);
+    <span class="kw">let</span> <span class="ident">i2c</span> <span class="op">=</span> <span class="ident">I2c</span>::<span class="ident">i2c1</span>(
+        <span class="ident">dp</span>.<span class="ident">I2C1</span>,
+        (<span class="ident">scl</span>, <span class="ident">sda</span>),
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">afio</span>.<span class="ident">mapr</span>,
+        <span class="ident">Mode</span>::<span class="ident">Fast</span> {
+            <span class="ident">frequency</span>: <span class="number">400_000</span>,
+            <span class="ident">duty_cycle</span>: <span class="ident">DutyCycle</span>::<span class="ident">Ratio1to1</span>,
+        },
+        <span class="ident">clocks</span>,
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rcc</span>.<span class="ident">apb1</span>,
+    );
+
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">disp</span>: <span class="ident">TerminalMode</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Builder</span>::<span class="ident">new</span>().<span class="ident">connect_i2c</span>(<span class="ident">i2c</span>).<span class="ident">into</span>();
+    <span class="ident">disp</span>.<span class="ident">init</span>().<span class="ident">unwrap</span>();
+    <span class="ident">disp</span>.<span class="ident">clear</span>().<span class="ident">unwrap</span>();
+
+    <span class="comment">// Endless loop</span>
+    <span class="kw">loop</span> {
+        <span class="kw">for</span> <span class="ident">c</span> <span class="kw">in</span> <span class="number">97</span>..<span class="number">123</span> {
+            <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">disp</span>.<span class="ident">write_str</span>(<span class="kw">unsafe</span> { <span class="ident">core</span>::<span class="ident">str</span>::<span class="ident">from_utf8_unchecked</span>(<span class="kw-2">&amp;</span>[<span class="ident">c</span>]) });
+        }
+        <span class="kw">for</span> <span class="ident">c</span> <span class="kw">in</span> <span class="number">65</span>..<span class="number">91</span> {
+            <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">disp</span>.<span class="ident">write_str</span>(<span class="kw">unsafe</span> { <span class="ident">core</span>::<span class="ident">str</span>::<span class="ident">from_utf8_unchecked</span>(<span class="kw-2">&amp;</span>[<span class="ident">c</span>]) });
+        }
+    }
+}</pre>
+<h2 id="draw-some-text-to-the-display" class="section-header"><a href="#draw-some-text-to-the-display">Draw some text to the display</a></h2>
+<p>Uses <a href="../ssd1306/mode/graphics/struct.GraphicsMode.html" title="mode::GraphicsMode">mode::GraphicsMode</a> and <a href="../embedded_graphics/index.html">embedded_graphics</a>.</p>
+
+<pre class="rust rust-example-rendered">
+<span class="attribute">#![<span class="ident">no_std</span>]</span>
+
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">cortex_m</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">embedded_graphics</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">embedded_hal</span> <span class="kw">as</span> <span class="ident">hal</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">panic_abort</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">ssd1306</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">stm32f103xx_hal</span> <span class="kw">as</span> <span class="ident">blue_pill</span>;
+
+<span class="kw">use</span> <span class="ident">blue_pill</span>::<span class="ident">i2c</span>::{<span class="ident">DutyCycle</span>, <span class="ident">I2c</span>, <span class="ident">Mode</span>};
+<span class="kw">use</span> <span class="ident">blue_pill</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="ident">embedded_graphics</span>::<span class="ident">fonts</span>::<span class="ident">Font6x8</span>;
+<span class="kw">use</span> <span class="ident">embedded_graphics</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="ident">ssd1306</span>::{<span class="ident">mode</span>::<span class="ident">GraphicsMode</span>, <span class="ident">Builder</span>};
+
+<span class="kw">fn</span> <span class="ident">main</span>() {
+    <span class="kw">let</span> <span class="ident">dp</span> <span class="op">=</span> <span class="ident">blue_pill</span>::<span class="ident">stm32f103xx</span>::<span class="ident">Peripherals</span>::<span class="ident">take</span>().<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">flash</span> <span class="op">=</span> <span class="ident">dp</span>.<span class="ident">FLASH</span>.<span class="ident">constrain</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rcc</span> <span class="op">=</span> <span class="ident">dp</span>.<span class="ident">RCC</span>.<span class="ident">constrain</span>();
+    <span class="kw">let</span> <span class="ident">clocks</span> <span class="op">=</span> <span class="ident">rcc</span>.<span class="ident">cfgr</span>.<span class="ident">freeze</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">flash</span>.<span class="ident">acr</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">afio</span> <span class="op">=</span> <span class="ident">dp</span>.<span class="ident">AFIO</span>.<span class="ident">constrain</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rcc</span>.<span class="ident">apb2</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">gpiob</span> <span class="op">=</span> <span class="ident">dp</span>.<span class="ident">GPIOB</span>.<span class="ident">split</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rcc</span>.<span class="ident">apb2</span>);
+    <span class="kw">let</span> <span class="ident">scl</span> <span class="op">=</span> <span class="ident">gpiob</span>.<span class="ident">pb8</span>.<span class="ident">into_alternate_open_drain</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">gpiob</span>.<span class="ident">crh</span>);
+    <span class="kw">let</span> <span class="ident">sda</span> <span class="op">=</span> <span class="ident">gpiob</span>.<span class="ident">pb9</span>.<span class="ident">into_alternate_open_drain</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">gpiob</span>.<span class="ident">crh</span>);
+
+    <span class="kw">let</span> <span class="ident">i2c</span> <span class="op">=</span> <span class="ident">I2c</span>::<span class="ident">i2c1</span>(
+        <span class="ident">dp</span>.<span class="ident">I2C1</span>,
+        (<span class="ident">scl</span>, <span class="ident">sda</span>),
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">afio</span>.<span class="ident">mapr</span>,
+        <span class="ident">Mode</span>::<span class="ident">Fast</span> {
+            <span class="ident">frequency</span>: <span class="number">400_000</span>,
+            <span class="ident">duty_cycle</span>: <span class="ident">DutyCycle</span>::<span class="ident">Ratio1to1</span>,
+        },
+        <span class="ident">clocks</span>,
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rcc</span>.<span class="ident">apb1</span>,
+    );
+
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">disp</span>: <span class="ident">GraphicsMode</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Builder</span>::<span class="ident">new</span>().<span class="ident">connect_i2c</span>(<span class="ident">i2c</span>).<span class="ident">into</span>();
+
+    <span class="ident">disp</span>.<span class="ident">init</span>().<span class="ident">unwrap</span>();
+    <span class="ident">disp</span>.<span class="ident">flush</span>().<span class="ident">unwrap</span>();
+    <span class="ident">disp</span>.<span class="ident">draw</span>(<span class="ident">Font6x8</span>::<span class="ident">render_str</span>(<span class="string">&quot;Hello world!&quot;</span>).<span class="ident">into_iter</span>());
+    <span class="ident">disp</span>.<span class="ident">draw</span>(
+        <span class="ident">Font6x8</span>::<span class="ident">render_str</span>(<span class="string">&quot;Hello Rust!&quot;</span>)
+            .<span class="ident">translate</span>((<span class="number">0</span>, <span class="number">16</span>))
+            .<span class="ident">into_iter</span>(),
+    );
+    <span class="ident">disp</span>.<span class="ident">flush</span>().<span class="ident">unwrap</span>();
+}</pre>
 </div><h2 id='reexports' class='section-header'><a href="#reexports">Re-exports</a></h2>
 <table><tr><td><code>pub use builder::<a class="struct" href="../ssd1306/builder/struct.Builder.html" title="struct ssd1306::builder::Builder">Builder</a>;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
@@ -22,7 +160,7 @@
                            <td><a class="mod" href="interface/index.html"
                                   title='mod ssd1306::interface'>interface</a></td>
                            <td class='docblock-short'>
-                                <p>SSD1306 Communication Interface</p>
+                                <p>SSD1306 Communication Interface (I2C/SPI)</p>
 
                            </td>
                        </tr>
@@ -30,7 +168,7 @@
                            <td><a class="mod" href="mode/index.html"
                                   title='mod ssd1306::mode'>mode</a></td>
                            <td class='docblock-short'>
-                                <p>Abstraction of different operating modes for the SSD1306</p>
+                                <p>Operating modes for the SSD1306</p>
 
                            </td>
                        </tr>
@@ -38,7 +176,7 @@
                            <td><a class="mod" href="properties/index.html"
                                   title='mod ssd1306::properties'>properties</a></td>
                            <td class='docblock-short'>
-                                <p>Module to handle common display properties</p>
+                                <p>Container to store and set display properties</p>
 
                            </td>
                        </tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>

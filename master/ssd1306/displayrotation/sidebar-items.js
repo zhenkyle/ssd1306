@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["DisplayRotation","Display rotation enumeration"]]});
+initSidebarItems({"enum":[["DisplayRotation","Display rotation"]]});

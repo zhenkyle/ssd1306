@@ -37,16 +37,20 @@
 <span id="37">37</span>
 <span id="38">38</span>
 <span id="39">39</span>
+<span id="40">40</span>
 </pre><pre class="rust ">
-<span class="doccomment">//! A raw display mode</span>
+<span class="doccomment">//! Raw mode for coercion into richer driver types</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! A display driver instance without high level functionality used as a return type from the</span>
+<span class="doccomment">//! builder. Used as a source to coerce the driver into richer modes like</span>
+<span class="doccomment">//! [`GraphicsMode`](../graphics/index.html) and [`TerminalMode`](../terminal/index.html).</span>
 
 <span class="kw">use</span> <span class="ident">interface</span>::<span class="ident">DisplayInterface</span>;
 <span class="kw">use</span> <span class="ident">properties</span>::<span class="ident">DisplayProperties</span>;
 
 <span class="kw">use</span> <span class="ident">mode</span>::<span class="ident">displaymode</span>::<span class="ident">DisplayModeTrait</span>;
 
-<span class="doccomment">/// A display mode without higher level mostly meant as a stepstone for changing into higher</span>
-<span class="doccomment">/// abstracted modes</span>
+<span class="doccomment">/// Raw display mode</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RawMode</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">DI</span>: <span class="ident">DisplayInterface</span>,
@@ -60,9 +64,7 @@
 {
     <span class="doccomment">/// Create new RawMode instance</span>
     <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">properties</span>: <span class="ident">DisplayProperties</span><span class="op">&lt;</span><span class="ident">DI</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
-        <span class="ident">RawMode</span> {
-            <span class="ident">properties</span>,
-        }
+        <span class="ident">RawMode</span> { <span class="ident">properties</span> }
     }
 
     <span class="doccomment">/// Release all resources used by RawMode</span>

@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["GraphicsMode","GraphicsMode"]]});
+initSidebarItems({"struct":[["GraphicsMode","Graphics mode handler"]]});

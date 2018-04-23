@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Builder","Communication interface factory"]]});
+initSidebarItems({"struct":[["Builder","Builder struct. Driver options and interface are set using its methods."]]});

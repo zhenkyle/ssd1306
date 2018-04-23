@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["DisplayProperties","DisplayProperties"]]});
+initSidebarItems({"struct":[["DisplayProperties","Display properties struct"]]});
