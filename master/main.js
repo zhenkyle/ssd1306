@@ -993,7 +993,7 @@
                             Math.min(results_returned[fullId].lev, returned);
                     }
                     if (index !== -1 || lev <= MAX_LEV_DISTANCE) {
-                        if (index !== -1) {
+                        if (index !== -1 && paths.length < 2) {
                             lev = 0;
                         }
                         if (results[fullId] === undefined) {
@@ -1996,7 +1996,7 @@
         if (e.parentNode.id === "main") {
             var otherMessage;
             if (hasClass(e, "type-decl")) {
-                otherMessage = '&nbsp;Show&nbsp;type&nbsp;declaration';
+                otherMessage = '&nbsp;Show&nbsp;declaration';
             }
             e.parentNode.insertBefore(createToggle(otherMessage), e);
             if (otherMessage && getCurrentValue('rustdoc-item-declarations') !== "false") {
