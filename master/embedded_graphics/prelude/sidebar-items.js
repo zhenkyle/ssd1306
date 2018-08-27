@@ -1,1 +1,1 @@
-initSidebarItems({});
+initSidebarItems({"struct":[["Coord","2D coordinate type"],["UnsignedCoord","2D coordinate type"]]});

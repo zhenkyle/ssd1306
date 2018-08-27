@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `embedded_graphics` crate."><meta name="keywords" content="rust, rustlang, rust-lang, embedded_graphics"><title>embedded_graphics - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Crate embedded_graphics</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#traits">Traits</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'embedded_graphics', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/embedded_graphics/lib.rs.html#1-50' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>embedded_graphics</a></span></h1><div class='docblock'><h1 id="embedded-graphics" class="section-header"><a href="#embedded-graphics">Embedded graphics</a></h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `embedded_graphics` crate."><meta name="keywords" content="rust, rustlang, rust-lang, embedded_graphics"><title>embedded_graphics - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Crate embedded_graphics</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#traits">Traits</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'embedded_graphics', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/embedded_graphics/lib.rs.html#1-67' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>embedded_graphics</a></span></h1><div class='docblock'><h1 id="embedded-graphics" class="section-header"><a href="#embedded-graphics">Embedded graphics</a></h1>
 <p>This crate aims to make drawing 2D graphics primitives super easy. It currently supports the
 following:</p>
 <ul>
 <li>1 bit-per-pixel images</li>
-<li>8 bit-per-pixel images (downsampled to 1BPP currently)</li>
+<li>8 bit-per-pixel images</li>
 <li>Primitives
 <ul>
 <li>Lines</li>
@@ -11,7 +11,7 @@ following:</p>
 <li>Circles</li>
 </ul>
 </li>
-<li>Text with a 6x8 pixel font</li>
+<li>Text with multiple <a href="./fonts/index.html">fonts</a></li>
 </ul>
 <p>A core goal is to do the above without using any buffers; the crate should work without a
 dynamic memory allocator and without pre-allocating large chunks of memory. To achieve this, it
@@ -20,10 +20,24 @@ with the minimum of saved state. This allows the consuming application to use fa
 little to no performance penalty.</p>
 <p>To use this crate in a driver, you only need to implement the <code>Drawing</code> trait to start drawing
 things.</p>
-<p>You can also add your own objects by implementing <code>IntoIterator&lt;Item = Pixel&gt;</code> to create an
+<p>You can also add your own objects by implementing <code>IntoIterator&lt;Item = Pixel&lt;C&gt;&gt;</code> to create an
 iterator that <code>Drawable#draw()</code> can consume.</p>
+<h2 id="crate-features" class="section-header"><a href="#crate-features">Crate features</a></h2>
+<ul>
+<li><code>nalgebra_support</code> - use the <a href="https://crates.io/crates/nalgebra">Nalgebra</a> crate with <code>no_std</code>
+support to use as the <code>Coord</code> type. This should allow you to use most Nalgebra methods on
+objects rendered by embedded_graphics.</li>
+</ul>
 </div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="coord/index.html"
+                                  title='mod embedded_graphics::coord'>coord</a></td>
+                           <td class='docblock-short'>
+                                <p>2D signed coordinate in screen space</p>
+
+                           </td>
+                       </tr>
                        <tr class=' module-item'>
                            <td><a class="mod" href="drawable/index.html"
                                   title='mod embedded_graphics::drawable'>drawable</a></td>
@@ -49,6 +63,14 @@ iterator that <code>Drawable#draw()</code> can consume.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
+                           <td><a class="mod" href="pixelcolor/index.html"
+                                  title='mod embedded_graphics::pixelcolor'>pixelcolor</a></td>
+                           <td class='docblock-short'>
+                                <p>Pixel color trait</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
                            <td><a class="mod" href="prelude/index.html"
                                   title='mod embedded_graphics::prelude'>prelude</a></td>
                            <td class='docblock-short'>
@@ -69,6 +91,14 @@ iterator that <code>Drawable#draw()</code> can consume.</p>
                                   title='mod embedded_graphics::transform'>transform</a></td>
                            <td class='docblock-short'>
                                 <p>Transformations for graphics objects</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="unsignedcoord/index.html"
+                                  title='mod embedded_graphics::unsignedcoord'>unsignedcoord</a></td>
+                           <td class='docblock-short'>
+                                <p>2D unsigned coordinate in screen space</p>
 
                            </td>
                        </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>

@@ -129,10 +129,10 @@ for more usage.</p>
 
     <span class="ident">disp</span>.<span class="ident">init</span>().<span class="ident">unwrap</span>();
     <span class="ident">disp</span>.<span class="ident">flush</span>().<span class="ident">unwrap</span>();
-    <span class="ident">disp</span>.<span class="ident">draw</span>(<span class="ident">Font6x8</span>::<span class="ident">render_str</span>(<span class="string">&quot;Hello world!&quot;</span>).<span class="ident">into_iter</span>());
+    <span class="ident">disp</span>.<span class="ident">draw</span>(<span class="ident">Font6x8</span>::<span class="ident">render_str</span>(<span class="string">&quot;Hello world!&quot;</span>, <span class="number">1u8</span>.<span class="ident">into</span>()).<span class="ident">into_iter</span>());
     <span class="ident">disp</span>.<span class="ident">draw</span>(
         <span class="ident">Font6x8</span>::<span class="ident">render_str</span>(<span class="string">&quot;Hello Rust!&quot;</span>)
-            .<span class="ident">translate</span>((<span class="number">0</span>, <span class="number">16</span>))
+            .<span class="ident">translate</span>(<span class="ident">Coord</span>::<span class="ident">new</span>(<span class="number">0</span>, <span class="number">16</span>))
             .<span class="ident">into_iter</span>(),
     );
     <span class="ident">disp</span>.<span class="ident">flush</span>().<span class="ident">unwrap</span>();

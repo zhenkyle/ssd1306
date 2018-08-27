@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Font6x8","Container struct to hold a positioned piece of text"]],"trait":[["Font","Common methods for all fonts"]]});
+initSidebarItems({"struct":[["Font12x16","Container struct to hold a positioned piece of text"],["Font6x12","Container struct to hold a positioned piece of text"],["Font6x8","Container struct to hold a positioned piece of text"],["Font8x16","Container struct to hold a positioned piece of text"]],"trait":[["Font","Common methods for all fonts"]]});

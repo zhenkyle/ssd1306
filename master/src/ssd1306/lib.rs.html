@@ -324,10 +324,10 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//!     disp.init().unwrap();</span>
 <span class="doccomment">//!     disp.flush().unwrap();</span>
-<span class="doccomment">//!     disp.draw(Font6x8::render_str(&quot;Hello world!&quot;).into_iter());</span>
+<span class="doccomment">//!     disp.draw(Font6x8::render_str(&quot;Hello world!&quot;, 1u8.into()).into_iter());</span>
 <span class="doccomment">//!     disp.draw(</span>
 <span class="doccomment">//!         Font6x8::render_str(&quot;Hello Rust!&quot;)</span>
-<span class="doccomment">//!             .translate((0, 16))</span>
+<span class="doccomment">//!             .translate(Coord::new(0, 16))</span>
 <span class="doccomment">//!             .into_iter(),</span>
 <span class="doccomment">//!     );</span>
 <span class="doccomment">//!     disp.flush().unwrap();</span>

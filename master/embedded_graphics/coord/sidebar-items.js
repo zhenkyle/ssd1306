@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Coord","2D coordinate type"]],"trait":[["ToUnsigned","Convert a value to an unsigned coordinate"]]});

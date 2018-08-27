@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["PixelColorU16","Pixel wrapper around `u16` type"],["PixelColorU32","Pixel wrapper around `u32` type"],["PixelColorU8","Pixel wrapper around `u8` type"]],"trait":[["PixelColor","Pixel color"]]});
