@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/embedded-graphics-0.3.0/src/primitives/line.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>line.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/embedded-graphics-0.4.0/src/primitives/line.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>line.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -292,6 +292,47 @@
 <span id="292">292</span>
 <span id="293">293</span>
 <span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! The line primitive</span>
 
@@ -299,6 +340,8 @@
 <span class="kw">use</span> <span class="kw">super</span>::<span class="kw">super</span>::<span class="ident">transform</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">coord</span>::{<span class="ident">Coord</span>, <span class="ident">ToUnsigned</span>};
 <span class="kw">use</span> <span class="ident">pixelcolor</span>::<span class="ident">PixelColor</span>;
+<span class="kw">use</span> <span class="ident">style</span>::<span class="ident">Style</span>;
+<span class="kw">use</span> <span class="ident">style</span>::<span class="ident">WithStyle</span>;
 
 <span class="comment">// TODO: Impl Default so people can leave the color bit out</span>
 <span class="doccomment">/// Line primitive</span>
@@ -310,8 +353,8 @@
     <span class="doccomment">/// End point</span>
     <span class="kw">pub</span> <span class="ident">end</span>: <span class="ident">Coord</span>,
 
-    <span class="doccomment">/// Line color</span>
-    <span class="kw">pub</span> <span class="ident">color</span>: <span class="ident">C</span>,
+    <span class="doccomment">/// Line style</span>
+    <span class="kw">pub</span> <span class="ident">style</span>: <span class="ident">Style</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span> <span class="ident">Line</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>
@@ -319,8 +362,41 @@
     <span class="ident">C</span>: <span class="ident">PixelColor</span>,
 {
     <span class="doccomment">/// Create a new line</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">start</span>: <span class="ident">Coord</span>, <span class="ident">end</span>: <span class="ident">Coord</span>, <span class="ident">color</span>: <span class="ident">C</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
-        <span class="ident">Line</span> { <span class="ident">start</span>, <span class="ident">end</span>, <span class="ident">color</span> }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">start</span>: <span class="ident">Coord</span>, <span class="ident">end</span>: <span class="ident">Coord</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="ident">Line</span> {
+            <span class="ident">start</span>,
+            <span class="ident">end</span>,
+            <span class="ident">style</span>: <span class="ident">Style</span>::<span class="ident">default</span>(),
+        }
+    }
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span> <span class="ident">WithStyle</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Line</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+    <span class="ident">C</span>: <span class="ident">PixelColor</span>,
+{
+    <span class="kw">fn</span> <span class="ident">with_style</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">style</span>: <span class="ident">Style</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">style</span> <span class="op">=</span> <span class="ident">style</span>;
+
+        <span class="self">self</span>
+    }
+
+    <span class="kw">fn</span> <span class="ident">with_stroke</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">color</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">style</span>.<span class="ident">stroke_color</span> <span class="op">=</span> <span class="ident">color</span>;
+
+        <span class="self">self</span>
+    }
+
+    <span class="kw">fn</span> <span class="ident">with_stroke_width</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">width</span>: <span class="ident">u8</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">style</span>.<span class="ident">stroke_width</span> <span class="op">=</span> <span class="ident">width</span>;
+
+        <span class="self">self</span>
+    }
+
+    <span class="kw">fn</span> <span class="ident">with_fill</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">color</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">style</span>.<span class="ident">fill_color</span> <span class="op">=</span> <span class="ident">color</span>;
+
+        <span class="self">self</span>
     }
 }
 
@@ -436,16 +512,15 @@
         <span class="comment">// Increment fast direction</span>
         <span class="self">self</span>.<span class="ident">quick</span> <span class="op">+=</span> <span class="number">1</span>;
 
-        <span class="comment">// Return</span>
-        <span class="prelude-val">Some</span>(<span class="ident">Pixel</span>(<span class="ident">coord</span>.<span class="ident">to_unsigned</span>(), <span class="self">self</span>.<span class="ident">line</span>.<span class="ident">color</span>.<span class="ident">clone</span>()))
+        <span class="comment">// Return if there is a stroke on the line</span>
+        <span class="self">self</span>.<span class="ident">line</span>
+            .<span class="ident">style</span>
+            .<span class="ident">stroke_color</span>
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">color</span><span class="op">|</span> <span class="ident">Pixel</span>(<span class="ident">coord</span>.<span class="ident">to_unsigned</span>(), <span class="ident">color</span>))
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span> <span class="ident">Drawable</span> <span class="kw">for</span> <span class="ident">Line</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">C</span>: <span class="ident">PixelColor</span>,
-{
-}
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span> <span class="ident">Drawable</span> <span class="kw">for</span> <span class="ident">Line</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">C</span>: <span class="ident">PixelColor</span> {}
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span> <span class="ident">Transform</span> <span class="kw">for</span> <span class="ident">Line</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>
 <span class="kw">where</span>
@@ -456,10 +531,13 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// # use embedded_graphics::primitives::Line;</span>
-    <span class="doccomment">/// # use embedded_graphics::transform::Transform;</span>
-    <span class="doccomment">/// # use embedded_graphics::coord::Coord;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let line = Line::new(Coord::new(5, 10), Coord::new(15, 20), 1u8);</span>
+    <span class="doccomment">/// # use embedded_graphics::dev::TestPixelColor;</span>
+    <span class="doccomment">/// # use embedded_graphics::prelude::*;</span>
+    <span class="doccomment">/// #</span>
+    <span class="doccomment">/// # let style: Style&lt;TestPixelColor&gt; = Style::with_stroke(TestPixelColor(1));</span>
+    <span class="doccomment">/// #</span>
+    <span class="doccomment">/// let line = Line::new(Coord::new(5, 10), Coord::new(15, 20))</span>
+    <span class="doccomment">/// #    .with_style(style);</span>
     <span class="doccomment">/// let moved = line.translate(Coord::new(10, 10));</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert_eq!(moved.start, Coord::new(15, 20));</span>
@@ -477,10 +555,13 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// # use embedded_graphics::primitives::Line;</span>
-    <span class="doccomment">/// # use embedded_graphics::transform::Transform;</span>
-    <span class="doccomment">/// # use embedded_graphics::coord::Coord;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut line = Line::new(Coord::new(5, 10), Coord::new(15, 20), 1u8);</span>
+    <span class="doccomment">/// # use embedded_graphics::dev::TestPixelColor;</span>
+    <span class="doccomment">/// # use embedded_graphics::prelude::*;</span>
+    <span class="doccomment">/// #</span>
+    <span class="doccomment">/// # let style: Style&lt;TestPixelColor&gt; = Style::with_stroke(TestPixelColor(1));</span>
+    <span class="doccomment">/// #</span>
+    <span class="doccomment">/// let mut line = Line::new(Coord::new(5, 10), Coord::new(15, 20))</span>
+    <span class="doccomment">/// #    .with_style(style);</span>
     <span class="doccomment">/// line.translate_mut(Coord::new(10, 10));</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert_eq!(line.start, Coord::new(15, 20));</span>
@@ -499,10 +580,11 @@
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">drawable</span>::<span class="ident">Pixel</span>;
     <span class="kw">use</span> <span class="ident">pixelcolor</span>::<span class="ident">PixelColorU8</span>;
+    <span class="kw">use</span> <span class="ident">style</span>::<span class="ident">Style</span>;
     <span class="kw">use</span> <span class="ident">unsignedcoord</span>::<span class="ident">UnsignedCoord</span>;
 
     <span class="kw">fn</span> <span class="ident">test_expected_line</span>(<span class="ident">start</span>: <span class="ident">Coord</span>, <span class="ident">end</span>: <span class="ident">Coord</span>, <span class="ident">expected</span>: <span class="kw-2">&amp;</span>[(<span class="ident">u32</span>, <span class="ident">u32</span>)]) {
-        <span class="kw">let</span> <span class="ident">line</span> <span class="op">=</span> <span class="ident">Line</span>::<span class="ident">new</span>(<span class="ident">start</span>, <span class="ident">end</span>, <span class="ident">PixelColorU8</span>(<span class="number">1</span>));
+        <span class="kw">let</span> <span class="ident">line</span> <span class="op">=</span> <span class="ident">Line</span>::<span class="ident">new</span>(<span class="ident">start</span>, <span class="ident">end</span>).<span class="ident">with_style</span>(<span class="ident">Style</span>::<span class="ident">with_stroke</span>(<span class="ident">PixelColorU8</span>(<span class="number">1</span>)));
         <span class="kw">for</span> (<span class="ident">idx</span>, <span class="ident">Pixel</span>(<span class="ident">coord</span>, <span class="kw">_</span>)) <span class="kw">in</span> <span class="ident">line</span>.<span class="ident">into_iter</span>().<span class="ident">enumerate</span>() {
             <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">coord</span>, <span class="ident">UnsignedCoord</span>::<span class="ident">new</span>(<span class="ident">expected</span>[<span class="ident">idx</span>].<span class="number">0</span>, <span class="ident">expected</span>[<span class="ident">idx</span>].<span class="number">1</span>));
         }

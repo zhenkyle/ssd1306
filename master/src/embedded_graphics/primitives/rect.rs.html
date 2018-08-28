@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/embedded-graphics-0.3.0/src/primitives/rect.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>rect.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/embedded-graphics-0.4.0/src/primitives/rect.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>rect.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -210,6 +210,65 @@
 <span id="210">210</span>
 <span id="211">211</span>
 <span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! The rectangle primitive. Also good for drawing squares.</span>
 
@@ -217,6 +276,8 @@
 <span class="kw">use</span> <span class="kw">super</span>::<span class="kw">super</span>::<span class="ident">transform</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">coord</span>::{<span class="ident">Coord</span>, <span class="ident">ToUnsigned</span>};
 <span class="kw">use</span> <span class="ident">pixelcolor</span>::<span class="ident">PixelColor</span>;
+<span class="kw">use</span> <span class="ident">style</span>::<span class="ident">Style</span>;
+<span class="kw">use</span> <span class="ident">style</span>::<span class="ident">WithStyle</span>;
 
 <span class="comment">// TODO: Impl Default so people can leave the color bit out</span>
 <span class="doccomment">/// Rectangle primitive</span>
@@ -228,22 +289,50 @@
     <span class="doccomment">/// Bottom right point of the rect</span>
     <span class="kw">pub</span> <span class="ident">bottom_right</span>: <span class="ident">Coord</span>,
 
-    <span class="doccomment">/// Border color</span>
-    <span class="kw">pub</span> <span class="ident">color</span>: <span class="ident">C</span>,
+    <span class="doccomment">/// Object style</span>
+    <span class="kw">pub</span> <span class="ident">style</span>: <span class="ident">Style</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span> <span class="ident">Rect</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">C</span>: <span class="ident">PixelColor</span>,
 {
-    <span class="doccomment">/// Create a new rectangle from the top left point to the bottom right point with a given border</span>
-    <span class="doccomment">/// color</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">top_left</span>: <span class="ident">Coord</span>, <span class="ident">bottom_right</span>: <span class="ident">Coord</span>, <span class="ident">color</span>: <span class="ident">C</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+    <span class="doccomment">/// Create a new rectangle from the top left point to the bottom right point with a given style</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">top_left</span>: <span class="ident">Coord</span>, <span class="ident">bottom_right</span>: <span class="ident">Coord</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">Rect</span> {
             <span class="ident">top_left</span>,
             <span class="ident">bottom_right</span>,
-            <span class="ident">color</span>,
+            <span class="ident">style</span>: <span class="ident">Style</span>::<span class="ident">default</span>(),
         }
+    }
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span> <span class="ident">WithStyle</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Rect</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+    <span class="ident">C</span>: <span class="ident">PixelColor</span>,
+{
+    <span class="kw">fn</span> <span class="ident">with_style</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">style</span>: <span class="ident">Style</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">style</span> <span class="op">=</span> <span class="ident">style</span>;
+
+        <span class="self">self</span>
+    }
+
+    <span class="kw">fn</span> <span class="ident">with_stroke</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">color</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">style</span>.<span class="ident">stroke_color</span> <span class="op">=</span> <span class="ident">color</span>;
+
+        <span class="self">self</span>
+    }
+
+    <span class="kw">fn</span> <span class="ident">with_stroke_width</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">width</span>: <span class="ident">u8</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">style</span>.<span class="ident">stroke_width</span> <span class="op">=</span> <span class="ident">width</span>;
+
+        <span class="self">self</span>
+    }
+
+    <span class="kw">fn</span> <span class="ident">with_fill</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">color</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">style</span>.<span class="ident">fill_color</span> <span class="op">=</span> <span class="ident">color</span>;
+
+        <span class="self">self</span>
     }
 }
 
@@ -258,10 +347,9 @@
         <span class="ident">RectIterator</span> {
             <span class="ident">top_left</span>: <span class="self">self</span>.<span class="ident">top_left</span>,
             <span class="ident">bottom_right</span>: <span class="self">self</span>.<span class="ident">bottom_right</span>,
-            <span class="ident">color</span>: <span class="self">self</span>.<span class="ident">color</span>,
+            <span class="ident">style</span>: <span class="self">self</span>.<span class="ident">style</span>,
             <span class="ident">x</span>: <span class="self">self</span>.<span class="ident">top_left</span>[<span class="number">0</span>],
             <span class="ident">y</span>: <span class="self">self</span>.<span class="ident">top_left</span>[<span class="number">1</span>],
-            <span class="ident">screen_size</span>: (<span class="self">self</span>.<span class="ident">bottom_right</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">top_left</span>).<span class="ident">abs</span>(),
         }
     }
 }
@@ -274,10 +362,9 @@
 {
     <span class="ident">top_left</span>: <span class="ident">Coord</span>,
     <span class="ident">bottom_right</span>: <span class="ident">Coord</span>,
-    <span class="ident">color</span>: <span class="ident">C</span>,
+    <span class="ident">style</span>: <span class="ident">Style</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>,
     <span class="ident">x</span>: <span class="ident">i32</span>,
     <span class="ident">y</span>: <span class="ident">i32</span>,
-    <span class="ident">screen_size</span>: <span class="ident">Coord</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">RectIterator</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>
@@ -287,29 +374,53 @@
     <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">Pixel</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>;
 
     <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Item</span><span class="op">&gt;</span> {
-        <span class="comment">// Entire object is off the top left of the screen, so render nothing</span>
+        <span class="comment">// If entire object is off the top left of the screen or has no border or fill colour,</span>
+        <span class="comment">// don&#39;t render anything</span>
         <span class="kw">if</span> (<span class="self">self</span>.<span class="ident">top_left</span>[<span class="number">0</span>] <span class="op">&lt;</span> <span class="number">0</span> <span class="op">||</span> <span class="self">self</span>.<span class="ident">top_left</span>[<span class="number">1</span>] <span class="op">&lt;</span> <span class="number">0</span>)
             <span class="op">&amp;&amp;</span> (<span class="self">self</span>.<span class="ident">bottom_right</span>[<span class="number">0</span>] <span class="op">&lt;</span> <span class="number">0</span> <span class="op">||</span> <span class="self">self</span>.<span class="ident">bottom_right</span>[<span class="number">1</span>] <span class="op">&lt;</span> <span class="number">0</span>)
+            <span class="op">||</span> (<span class="self">self</span>.<span class="ident">style</span>.<span class="ident">stroke_color</span>.<span class="ident">is_none</span>() <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">style</span>.<span class="ident">fill_color</span>.<span class="ident">is_none</span>())
         {
             <span class="kw">return</span> <span class="prelude-val">None</span>;
         }
 
-        <span class="kw">let</span> <span class="ident">coord</span> <span class="op">=</span> <span class="kw">loop</span> {
-            <span class="comment">// If we&#39;re below the rect, it&#39;s completely rendered and we&#39;re done</span>
+        <span class="kw">let</span> <span class="ident">pixel</span> <span class="op">=</span> <span class="kw">loop</span> {
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">out</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+
+            <span class="comment">// Finished, i.e. we&#39;re below the rect</span>
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">y</span> <span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">bottom_right</span>[<span class="number">1</span>] {
-                <span class="kw">return</span> <span class="prelude-val">None</span>;
+                <span class="kw">break</span> <span class="prelude-val">None</span>;
             }
 
-            <span class="kw">let</span> <span class="ident">coord</span> <span class="op">=</span> <span class="ident">Coord</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">x</span>, <span class="self">self</span>.<span class="ident">y</span>);
+            <span class="kw">let</span> <span class="ident">border_width</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">style</span>.<span class="ident">stroke_width</span> <span class="kw">as</span> <span class="ident">i32</span>;
+            <span class="kw">let</span> <span class="ident">tl</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">top_left</span>;
+            <span class="kw">let</span> <span class="ident">br</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">bottom_right</span>;
 
-            <span class="comment">// Step across 1 if rendering top/bottom lines</span>
-            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">y</span> <span class="op">==</span> <span class="self">self</span>.<span class="ident">top_left</span>[<span class="number">1</span>] <span class="op">||</span> <span class="self">self</span>.<span class="ident">y</span> <span class="op">==</span> <span class="self">self</span>.<span class="ident">bottom_right</span>[<span class="number">1</span>] {
-                <span class="self">self</span>.<span class="ident">x</span> <span class="op">+=</span> <span class="number">1</span>;
+            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">x</span> <span class="op">&gt;=</span> <span class="number">0</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">y</span> <span class="op">&gt;=</span> <span class="number">0</span> {
+                <span class="comment">// Border</span>
+                <span class="kw">if</span> (
+                <span class="comment">// Top border</span>
+                (<span class="self">self</span>.<span class="ident">y</span> <span class="op">&gt;=</span> <span class="ident">tl</span>[<span class="number">1</span>] <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">y</span> <span class="op">&lt;</span> <span class="ident">tl</span>[<span class="number">1</span>] <span class="op">+</span> <span class="ident">border_width</span>)
+                <span class="comment">// Bottom border</span>
+                <span class="op">||</span> (<span class="self">self</span>.<span class="ident">y</span> <span class="op">&lt;=</span> <span class="ident">br</span>[<span class="number">1</span>] <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">y</span> <span class="op">&gt;</span> <span class="ident">br</span>[<span class="number">1</span>] <span class="op">-</span> <span class="ident">border_width</span>)
+                <span class="comment">// Left border</span>
+                <span class="op">||</span> (<span class="self">self</span>.<span class="ident">x</span> <span class="op">&gt;=</span> <span class="ident">tl</span>[<span class="number">0</span>] <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">x</span> <span class="op">&lt;</span> <span class="ident">tl</span>[<span class="number">0</span>] <span class="op">+</span> <span class="ident">border_width</span>)
+                <span class="comment">// Right border</span>
+                <span class="op">||</span> (<span class="self">self</span>.<span class="ident">x</span> <span class="op">&lt;=</span> <span class="ident">br</span>[<span class="number">0</span>] <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">x</span> <span class="op">&gt;</span> <span class="ident">br</span>[<span class="number">0</span>] <span class="op">-</span> <span class="ident">border_width</span>)
+                ) <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">style</span>.<span class="ident">stroke_color</span>.<span class="ident">is_some</span>()
+                {
+                    <span class="ident">out</span> <span class="op">=</span> <span class="prelude-val">Some</span>((
+                        <span class="self">self</span>.<span class="ident">x</span>,
+                        <span class="self">self</span>.<span class="ident">y</span>,
+                        <span class="self">self</span>.<span class="ident">style</span>.<span class="ident">stroke_color</span>.<span class="ident">expect</span>(<span class="string">&quot;Expected stroke&quot;</span>),
+                    ));
+                }
+                <span class="comment">// Fill</span>
+                <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">fill</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">style</span>.<span class="ident">fill_color</span> {
+                    <span class="ident">out</span> <span class="op">=</span> <span class="prelude-val">Some</span>((<span class="self">self</span>.<span class="ident">x</span>, <span class="self">self</span>.<span class="ident">y</span>, <span class="ident">fill</span>));
+                }
             }
-            <span class="comment">// Skip across rect empty space if rendering left/right lines</span>
-            <span class="kw">else</span> {
-                <span class="self">self</span>.<span class="ident">x</span> <span class="op">+=</span> <span class="self">self</span>.<span class="ident">screen_size</span>[<span class="number">0</span>];
-            }
+
+            <span class="self">self</span>.<span class="ident">x</span> <span class="op">+=</span> <span class="number">1</span>;
 
             <span class="comment">// Reached end of row? Jump down one line</span>
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">x</span> <span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">bottom_right</span>[<span class="number">0</span>] {
@@ -317,20 +428,16 @@
                 <span class="self">self</span>.<span class="ident">y</span> <span class="op">+=</span> <span class="number">1</span>;
             }
 
-            <span class="kw">if</span> <span class="ident">coord</span>[<span class="number">0</span>] <span class="op">&gt;=</span> <span class="number">0</span> <span class="op">&amp;&amp;</span> <span class="ident">coord</span>[<span class="number">1</span>] <span class="op">&gt;=</span> <span class="number">0</span> {
-                <span class="kw">break</span> <span class="ident">coord</span>;
+            <span class="kw">if</span> <span class="ident">out</span>.<span class="ident">is_some</span>() {
+                <span class="kw">break</span> <span class="ident">out</span>;
             }
         };
 
-        <span class="prelude-val">Some</span>(<span class="ident">Pixel</span>(<span class="ident">coord</span>.<span class="ident">to_unsigned</span>(), <span class="self">self</span>.<span class="ident">color</span>))
+        <span class="ident">pixel</span>.<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">c</span>)<span class="op">|</span> <span class="ident">Pixel</span>(<span class="ident">Coord</span>::<span class="ident">new</span>(<span class="ident">x</span>, <span class="ident">y</span>).<span class="ident">to_unsigned</span>(), <span class="ident">c</span>))
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span> <span class="ident">Drawable</span> <span class="kw">for</span> <span class="ident">Rect</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">C</span>: <span class="ident">PixelColor</span>,
-{
-}
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span> <span class="ident">Drawable</span> <span class="kw">for</span> <span class="ident">Rect</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">C</span>: <span class="ident">PixelColor</span> {}
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span> <span class="ident">Transform</span> <span class="kw">for</span> <span class="ident">Rect</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>
 <span class="kw">where</span>
@@ -341,10 +448,13 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// # use embedded_graphics::primitives::Rect;</span>
-    <span class="doccomment">/// # use embedded_graphics::transform::Transform;</span>
-    <span class="doccomment">/// # use embedded_graphics::coord::Coord;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let rect = Rect::new(Coord::new(5, 10), Coord::new(15, 20), 1u8);</span>
+    <span class="doccomment">/// # use embedded_graphics::dev::TestPixelColor;</span>
+    <span class="doccomment">/// # use embedded_graphics::prelude::*;</span>
+    <span class="doccomment">/// #</span>
+    <span class="doccomment">/// # let style: Style&lt;TestPixelColor&gt; = Style::with_stroke(TestPixelColor(1));</span>
+    <span class="doccomment">/// #</span>
+    <span class="doccomment">/// let rect = Rect::new(Coord::new(5, 10), Coord::new(15, 20))</span>
+    <span class="doccomment">/// #    .with_style(style);</span>
     <span class="doccomment">/// let moved = rect.translate(Coord::new(10, 10));</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert_eq!(moved.top_left, Coord::new(15, 20));</span>
@@ -362,10 +472,13 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// # use embedded_graphics::primitives::Rect;</span>
-    <span class="doccomment">/// # use embedded_graphics::transform::Transform;</span>
-    <span class="doccomment">/// # use embedded_graphics::coord::Coord;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut rect = Rect::new(Coord::new(5, 10), Coord::new(15, 20), 1u8);</span>
+    <span class="doccomment">/// # use embedded_graphics::dev::TestPixelColor;</span>
+    <span class="doccomment">/// # use embedded_graphics::prelude::*;</span>
+    <span class="doccomment">/// #</span>
+    <span class="doccomment">/// # let style: Style&lt;TestPixelColor&gt; = Style::with_stroke(TestPixelColor(1));</span>
+    <span class="doccomment">/// #</span>
+    <span class="doccomment">/// let mut rect = Rect::new(Coord::new(5, 10), Coord::new(15, 20))</span>
+    <span class="doccomment">/// #    .with_style(style);</span>
     <span class="doccomment">/// rect.translate_mut(Coord::new(10, 10));</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert_eq!(rect.top_left, Coord::new(15, 20));</span>
@@ -382,12 +495,12 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="ident">pixelcolor</span>::<span class="ident">PixelColorU8</span>;
+    <span class="kw">use</span> <span class="ident">dev</span>::<span class="ident">TestPixelColor</span>;
     <span class="kw">use</span> <span class="ident">unsignedcoord</span>::<span class="ident">UnsignedCoord</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_can_be_translated</span>() {
-        <span class="kw">let</span> <span class="ident">rect</span> <span class="op">=</span> <span class="ident">Rect</span>::<span class="ident">new</span>(<span class="ident">Coord</span>::<span class="ident">new</span>(<span class="number">5</span>, <span class="number">10</span>), <span class="ident">Coord</span>::<span class="ident">new</span>(<span class="number">15</span>, <span class="number">20</span>), <span class="ident">PixelColorU8</span>(<span class="number">1</span>));
+        <span class="kw">let</span> <span class="ident">rect</span>: <span class="ident">Rect</span><span class="op">&lt;</span><span class="ident">TestPixelColor</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Rect</span>::<span class="ident">new</span>(<span class="ident">Coord</span>::<span class="ident">new</span>(<span class="number">5</span>, <span class="number">10</span>), <span class="ident">Coord</span>::<span class="ident">new</span>(<span class="number">15</span>, <span class="number">20</span>));
         <span class="kw">let</span> <span class="ident">moved</span> <span class="op">=</span> <span class="ident">rect</span>.<span class="ident">translate</span>(<span class="ident">Coord</span>::<span class="ident">new</span>(<span class="number">10</span>, <span class="number">10</span>));
 
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">moved</span>.<span class="ident">top_left</span>, <span class="ident">Coord</span>::<span class="ident">new</span>(<span class="number">15</span>, <span class="number">20</span>));
@@ -396,7 +509,9 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_draws_unfilled_rect</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rect</span> <span class="op">=</span> <span class="ident">Rect</span>::<span class="ident">new</span>(<span class="ident">Coord</span>::<span class="ident">new</span>(<span class="number">2</span>, <span class="number">2</span>), <span class="ident">Coord</span>::<span class="ident">new</span>(<span class="number">4</span>, <span class="number">4</span>), <span class="number">1u8</span>).<span class="ident">into_iter</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rect</span>: <span class="ident">RectIterator</span><span class="op">&lt;</span><span class="ident">TestPixelColor</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Rect</span>::<span class="ident">new</span>(<span class="ident">Coord</span>::<span class="ident">new</span>(<span class="number">2</span>, <span class="number">2</span>), <span class="ident">Coord</span>::<span class="ident">new</span>(<span class="number">4</span>, <span class="number">4</span>))
+            .<span class="ident">with_style</span>(<span class="ident">Style</span>::<span class="ident">with_stroke</span>(<span class="number">1u8</span>.<span class="ident">into</span>()))
+            .<span class="ident">into_iter</span>();
 
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">rect</span>.<span class="ident">next</span>(), <span class="prelude-val">Some</span>(<span class="ident">Pixel</span>(<span class="ident">UnsignedCoord</span>::<span class="ident">new</span>(<span class="number">2</span>, <span class="number">2</span>), <span class="number">1</span>.<span class="ident">into</span>())));
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">rect</span>.<span class="ident">next</span>(), <span class="prelude-val">Some</span>(<span class="ident">Pixel</span>(<span class="ident">UnsignedCoord</span>::<span class="ident">new</span>(<span class="number">3</span>, <span class="number">2</span>), <span class="number">1</span>.<span class="ident">into</span>())));
@@ -412,7 +527,10 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_can_be_negative</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rect</span> <span class="op">=</span> <span class="ident">Rect</span>::<span class="ident">new</span>(<span class="ident">Coord</span>::<span class="ident">new</span>(<span class="op">-</span><span class="number">2</span>, <span class="op">-</span><span class="number">2</span>), <span class="ident">Coord</span>::<span class="ident">new</span>(<span class="number">2</span>, <span class="number">2</span>), <span class="number">1u8</span>).<span class="ident">into_iter</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rect</span>: <span class="ident">RectIterator</span><span class="op">&lt;</span><span class="ident">TestPixelColor</span><span class="op">&gt;</span> <span class="op">=</span>
+            <span class="ident">Rect</span>::<span class="ident">new</span>(<span class="ident">Coord</span>::<span class="ident">new</span>(<span class="op">-</span><span class="number">2</span>, <span class="op">-</span><span class="number">2</span>), <span class="ident">Coord</span>::<span class="ident">new</span>(<span class="number">2</span>, <span class="number">2</span>))
+                .<span class="ident">with_style</span>(<span class="ident">Style</span>::<span class="ident">with_stroke</span>(<span class="number">1u8</span>.<span class="ident">into</span>()))
+                .<span class="ident">into_iter</span>();
 
         <span class="comment">// TODO: Macro</span>
         <span class="comment">// Only the bottom right corner of the rect should be visible</span>
