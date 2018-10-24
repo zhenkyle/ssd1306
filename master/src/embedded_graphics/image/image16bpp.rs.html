@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/embedded-graphics-0.4.4/src/image/image1bpp.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>image1bpp.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/travis/.cargo/registry/src/github.com-1ecc6299db9ec823/embedded-graphics-0.4.4/src/image/image16bpp.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>image16bpp.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -173,16 +173,69 @@
 <span id="173">173</span>
 <span id="174">174</span>
 <span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
 </pre><pre class="rust ">
-<span class="doccomment">//! 1 bit per pixel image. Each byte of input data defines the on/off state of 8 horizontal pixels</span>
-<span class="doccomment">//! to be displayed on the screen.</span>
+<span class="doccomment">//! 16 bits per pixel images. Every two bytes define the color for each pixel.</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! You can convert an image to 1BPP for inclusion with `include_bytes!()` using the following</span>
-<span class="doccomment">//! Imagemagick command:</span>
+<span class="doccomment">//! You can convert an image to 16BPP for inclusion with `include_bytes!()` doing the following</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ```bash</span>
-<span class="doccomment">//! convert image.png -depth 1 gray:&quot;image.raw&quot;</span>
+<span class="doccomment">//! convert image.png -alpha off -depth 16 gray:&quot;image.raw&quot;</span>
 <span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! OR with GIMP:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Converting the Image to 16bit BMP, then running</span>
+<span class="doccomment">//! ```bash</span>
+<span class="doccomment">//! tail -c $bytes image.bmp &gt; image.raw</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//! where $bytes is `w * h * 2`</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! This will remove the BMP header leaving the raw pixel data</span>
+<span class="doccomment">//! E.g 64x64 image will have `64 * 64 * 2` bytes of raw data.</span>
 
 <span class="kw">use</span> <span class="kw">super</span>::<span class="kw">super</span>::<span class="ident">drawable</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="kw">super</span>::<span class="kw">super</span>::<span class="ident">transform</span>::<span class="kw-2">*</span>;
@@ -191,28 +244,30 @@
 <span class="kw">use</span> <span class="ident">core</span>::<span class="ident">marker</span>::<span class="ident">PhantomData</span>;
 <span class="kw">use</span> <span class="ident">pixelcolor</span>::<span class="ident">PixelColor</span>;
 
-<span class="doccomment">/// 1 bit per pixel image</span>
+<span class="doccomment">/// 8 bit per pixel image</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Image1BPP</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Image width in pixels</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Image16BPP</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span>: <span class="ident">PixelColor</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Image width</span>
     <span class="ident">width</span>: <span class="ident">u32</span>,
 
-    <span class="doccomment">/// Image height in pixels</span>
+    <span class="doccomment">/// Image height</span>
     <span class="ident">height</span>: <span class="ident">u32</span>,
 
-    <span class="doccomment">/// Image data, 1 bit per byte, 1 byte per 8 horizontal pixels</span>
+    <span class="doccomment">/// Image data, 1 byte per pixel</span>
     <span class="ident">imagedata</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>],
 
-    <span class="doccomment">/// Image offset in pixels from screen origin (0,0)</span>
+    <span class="doccomment">/// Top left corner offset from display origin (0,0)</span>
     <span class="kw">pub</span> <span class="ident">offset</span>: <span class="ident">Coord</span>,
 
     <span class="ident">pixel_type</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span> <span class="ident">Image</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Image1BPP</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span> <span class="ident">Image</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Image16BPP</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">C</span>: <span class="ident">PixelColor</span>,
 {
+    <span class="doccomment">/// Create a new 16BPP image with given data, width and height. Data length *must* equal</span>
+    <span class="doccomment">/// `width * height * 2`</span>
     <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">imagedata</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>], <span class="ident">width</span>: <span class="ident">u32</span>, <span class="ident">height</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">width</span>,
@@ -224,16 +279,15 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span> <span class="ident">IntoIterator</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Image1BPP</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span> <span class="ident">IntoIterator</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Image16BPP</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">C</span>: <span class="ident">PixelColor</span>,
+    <span class="ident">C</span>: <span class="ident">PixelColor</span> <span class="op">+</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>,
 {
     <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">Pixel</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="ident">IntoIter</span> <span class="op">=</span> <span class="ident">Image1BPPIterator</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">IntoIter</span> <span class="op">=</span> <span class="ident">Image16BPPIterator</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span>;
 
-    <span class="comment">// NOTE: `self` is a reference already, no copies here!</span>
     <span class="kw">fn</span> <span class="ident">into_iter</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="ident">IntoIter</span> {
-        <span class="ident">Image1BPPIterator</span> {
+        <span class="ident">Image16BPPIterator</span> {
             <span class="ident">im</span>: <span class="self">self</span>,
             <span class="ident">x</span>: <span class="number">0</span>,
             <span class="ident">y</span>: <span class="number">0</span>,
@@ -242,27 +296,22 @@
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Image1BPPIterator</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span>: <span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">x</span>: <span class="ident">u32</span>,
-    <span class="ident">y</span>: <span class="ident">u32</span>,
-    <span class="ident">im</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Image1BPP</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span>,
-}
-
-<span class="doccomment">/// Iterator over every pixel in the source image</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">Image1BPPIterator</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Image16BPPIterator</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span>: <span class="lifetime">&#39;a</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">C</span>: <span class="ident">PixelColor</span>,
+{
+    <span class="ident">x</span>: <span class="ident">u32</span>,
+    <span class="ident">y</span>: <span class="ident">u32</span>,
+    <span class="ident">im</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Image16BPP</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span>,
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">Image16BPPIterator</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+    <span class="ident">C</span>: <span class="ident">PixelColor</span> <span class="op">+</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>,
 {
     <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">Pixel</span><span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>;
 
     <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Item</span><span class="op">&gt;</span> {
-        <span class="comment">// If we&#39;re outside the upper left screen bounds, bail</span>
-        <span class="kw">if</span> (<span class="self">self</span>.<span class="ident">im</span>.<span class="ident">offset</span>[<span class="number">0</span>] <span class="op">+</span> <span class="self">self</span>.<span class="ident">im</span>.<span class="ident">width</span> <span class="kw">as</span> <span class="ident">i32</span>) <span class="op">&lt;</span> <span class="number">0</span>
-            <span class="op">&amp;&amp;</span> (<span class="self">self</span>.<span class="ident">im</span>.<span class="ident">offset</span>[<span class="number">1</span>] <span class="op">+</span> <span class="self">self</span>.<span class="ident">im</span>.<span class="ident">height</span> <span class="kw">as</span> <span class="ident">i32</span>) <span class="op">&lt;</span> <span class="number">0</span>
-        {
-            <span class="kw">return</span> <span class="prelude-val">None</span>;
-        }
-
         <span class="kw">let</span> <span class="ident">current_pixel</span> <span class="op">=</span> <span class="kw">loop</span> {
             <span class="kw">let</span> <span class="ident">w</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">im</span>.<span class="ident">width</span>;
             <span class="kw">let</span> <span class="ident">h</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">im</span>.<span class="ident">height</span>;
@@ -274,15 +323,10 @@
                 <span class="kw">return</span> <span class="prelude-val">None</span>;
             }
 
-            <span class="comment">// Rows are padded to a full byte. Rust integer division rounds down, so add 1 full byte if there are remaining pixels</span>
-            <span class="kw">let</span> <span class="ident">bytes_in_row</span> <span class="op">=</span> (<span class="ident">w</span> <span class="op">/</span> <span class="number">8</span>) <span class="op">+</span> <span class="kw">if</span> <span class="ident">w</span> <span class="op">%</span> <span class="number">8</span> <span class="op">&gt;</span> <span class="number">0</span> { <span class="number">1</span> } <span class="kw">else</span> { <span class="number">0</span> };
-
-            <span class="kw">let</span> <span class="ident">row_start</span> <span class="op">=</span> <span class="ident">bytes_in_row</span> <span class="op">*</span> <span class="ident">y</span>;
-
-            <span class="kw">let</span> <span class="ident">row_byte_index</span> <span class="op">=</span> <span class="ident">x</span> <span class="op">/</span> <span class="number">8</span>;
-            <span class="kw">let</span> <span class="ident">byte_index</span> <span class="op">=</span> <span class="ident">row_start</span> <span class="op">+</span> <span class="ident">row_byte_index</span>;
-            <span class="kw">let</span> <span class="ident">bit_offset</span> <span class="op">=</span> <span class="number">7</span> <span class="op">-</span> (<span class="ident">x</span> <span class="op">-</span> (<span class="ident">row_byte_index</span> <span class="op">*</span> <span class="number">8</span>));
-            <span class="kw">let</span> <span class="ident">bit_value</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">im</span>.<span class="ident">imagedata</span>[<span class="ident">byte_index</span> <span class="kw">as</span> <span class="ident">usize</span>] <span class="op">&gt;&gt;</span> <span class="ident">bit_offset</span>) <span class="op">&amp;</span> <span class="number">1</span>;
+            <span class="kw">let</span> <span class="ident">offset</span> <span class="op">=</span> ((<span class="ident">y</span> <span class="op">*</span> <span class="ident">w</span>) <span class="op">+</span> <span class="ident">x</span>) <span class="op">*</span> <span class="number">2</span>; <span class="comment">// * 2 as two bytes per pixel</span>
+                                            <span class="comment">// merge two bytes into a u16</span>
+            <span class="kw">let</span> <span class="ident">bit_value</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">im</span>.<span class="ident">imagedata</span>[(<span class="ident">offset</span> <span class="op">+</span> <span class="number">1</span>) <span class="kw">as</span> <span class="ident">usize</span>] <span class="kw">as</span> <span class="ident">u16</span>) <span class="op">&lt;&lt;</span> <span class="number">8</span>
+                <span class="op">|</span> <span class="self">self</span>.<span class="ident">im</span>.<span class="ident">imagedata</span>[<span class="ident">offset</span> <span class="kw">as</span> <span class="ident">usize</span>] <span class="kw">as</span> <span class="ident">u16</span>;
 
             <span class="kw">let</span> <span class="ident">current_pixel</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">im</span>.<span class="ident">offset</span> <span class="op">+</span> <span class="ident">Coord</span>::<span class="ident">new</span>(<span class="ident">x</span> <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">y</span> <span class="kw">as</span> <span class="ident">i32</span>);
 
@@ -304,20 +348,23 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span> <span class="ident">Drawable</span> <span class="kw">for</span> <span class="ident">Image1BPP</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span> {}
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span> <span class="ident">Drawable</span> <span class="kw">for</span> <span class="ident">Image16BPP</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">C</span>: <span class="ident">PixelColor</span> {}
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span> <span class="ident">Transform</span> <span class="kw">for</span> <span class="ident">Image1BPP</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span> <span class="ident">Transform</span> <span class="kw">for</span> <span class="ident">Image16BPP</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+    <span class="ident">C</span>: <span class="ident">PixelColor</span>,
+{
     <span class="doccomment">/// Translate the image from its current position to a new position by (x, y) pixels, returning</span>
-    <span class="doccomment">/// a new `Image1BPP`. For a mutating transform, see `translate_mut`.</span>
+    <span class="doccomment">/// a new `Image16BPP`. For a mutating transform, see `translate_mut`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use embedded_graphics::image::{ Image, Image1BPP };</span>
+    <span class="doccomment">/// # use embedded_graphics::image::{ Image, Image16BPP };</span>
     <span class="doccomment">/// # use embedded_graphics::transform::Transform;</span>
     <span class="doccomment">/// # use embedded_graphics::coord::Coord;</span>
     <span class="doccomment">/// # use embedded_graphics::pixelcolor::PixelColorU8;</span>
-    <span class="doccomment">/// #</span>
-    <span class="doccomment">/// // 8px x 1px test image</span>
-    <span class="doccomment">/// let image: Image1BPP&lt;PixelColorU8&gt; = Image1BPP::new(&amp;[ 0xff ], 8, 1);</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// // 1px x 1px test image</span>
+    <span class="doccomment">/// let image: Image16BPP&lt;PixelColorU8&gt; = Image16BPP::new(&amp;[ 0xff ], 1, 1);</span>
     <span class="doccomment">/// let moved = image.translate(Coord::new(25, 30));</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert_eq!(image.offset, Coord::new(0, 0));</span>
@@ -333,12 +380,13 @@
     <span class="doccomment">/// Translate the image from its current position to a new position by (x, y) pixels.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # use embedded_graphics::image::{ Image, Image1BPP };</span>
+    <span class="doccomment">/// # use embedded_graphics::image::{ Image, Image16BPP };</span>
     <span class="doccomment">/// # use embedded_graphics::transform::Transform;</span>
     <span class="doccomment">/// # use embedded_graphics::coord::Coord;</span>
     <span class="doccomment">/// # use embedded_graphics::pixelcolor::PixelColorU8;</span>
-    <span class="doccomment">/// #</span>
-    <span class="doccomment">/// let mut image: Image1BPP&lt;PixelColorU8&gt; = Image1BPP::new(&amp;[ 0xff ], 8, 1);</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// // 1px x 1px test image</span>
+    <span class="doccomment">/// let mut image: Image16BPP&lt;PixelColorU8&gt; = Image16BPP::new(&amp;[ 0xff ], 1, 1);</span>
     <span class="doccomment">/// image.translate_mut(Coord::new(25, 30));</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert_eq!(image.offset, Coord::new(25, 30));</span>
@@ -347,6 +395,46 @@
         <span class="self">self</span>.<span class="ident">offset</span> <span class="op">+=</span> <span class="ident">by</span>;
 
         <span class="self">self</span>
+    }
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident">pixelcolor</span>::<span class="ident">PixelColorU16</span>;
+    <span class="kw">use</span> <span class="ident">unsignedcoord</span>::<span class="ident">UnsignedCoord</span>;
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">it_can_have_negative_offsets</span>() {
+        <span class="kw">let</span> <span class="ident">image</span>: <span class="ident">Image16BPP</span><span class="op">&lt;</span><span class="ident">PixelColorU16</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Image16BPP</span>::<span class="ident">new</span>(
+            <span class="kw-2">&amp;</span>[
+                <span class="number">0xff</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0xbb</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0xcc</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0xee</span>, <span class="number">0x00</span>,
+                <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0xaa</span>, <span class="number">0x00</span>,
+            ],
+            <span class="number">3</span>,
+            <span class="number">3</span>,
+        )
+        .<span class="ident">translate</span>(<span class="ident">Coord</span>::<span class="ident">new</span>(<span class="op">-</span><span class="number">1</span>, <span class="op">-</span><span class="number">1</span>));
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">it</span> <span class="op">=</span> <span class="ident">image</span>.<span class="ident">into_iter</span>();
+
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">it</span>.<span class="ident">next</span>(),
+            <span class="prelude-val">Some</span>(<span class="ident">Pixel</span>(<span class="ident">UnsignedCoord</span>::<span class="ident">new</span>(<span class="number">0</span>, <span class="number">0</span>), <span class="number">0xcc_u16</span>.<span class="ident">into</span>()))
+        );
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">it</span>.<span class="ident">next</span>(),
+            <span class="prelude-val">Some</span>(<span class="ident">Pixel</span>(<span class="ident">UnsignedCoord</span>::<span class="ident">new</span>(<span class="number">1</span>, <span class="number">0</span>), <span class="number">0x00_u16</span>.<span class="ident">into</span>()))
+        );
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">it</span>.<span class="ident">next</span>(),
+            <span class="prelude-val">Some</span>(<span class="ident">Pixel</span>(<span class="ident">UnsignedCoord</span>::<span class="ident">new</span>(<span class="number">0</span>, <span class="number">1</span>), <span class="number">0x00_u16</span>.<span class="ident">into</span>()))
+        );
+        <span class="macro">assert_eq</span><span class="macro">!</span>(
+            <span class="ident">it</span>.<span class="ident">next</span>(),
+            <span class="prelude-val">Some</span>(<span class="ident">Pixel</span>(<span class="ident">UnsignedCoord</span>::<span class="ident">new</span>(<span class="number">1</span>, <span class="number">1</span>), <span class="number">0xaa_u16</span>.<span class="ident">into</span>()))
+        );
+
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">it</span>.<span class="ident">next</span>(), <span class="prelude-val">None</span>);
     }
 }
 </pre>
