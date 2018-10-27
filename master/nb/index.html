@@ -29,7 +29,7 @@ now (i.e. busy wait)</li>
 <p>So in your API instead of returning <code>Result&lt;T, MyError&gt;</code> return
 <code>nb::Result&lt;T, MyError&gt;</code></p>
 
-<pre class="rust rust-example-rendered">
+<div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">enum</span> <span class="ident">MyError</span> {
     <span class="ident">ThisError</span>,
     <span class="ident">ThatError</span>,
@@ -45,17 +45,17 @@ now (i.e. busy wait)</li>
 <span class="comment">// instead of blocking</span>
 <span class="kw">fn</span> <span class="ident">after</span>() <span class="op">-&gt;</span> <span class="ident">nb</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">MyError</span><span class="op">&gt;</span> {
     <span class="comment">// ..</span>
-}</pre>
+}</pre></div>
 <p>You can use the <em>never type</em> (<code>!</code>) to signal that some API has no fatal
 errors but may block:</p>
 
-<pre class="rust rust-example-rendered">
+<div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="attribute">#![<span class="ident">feature</span>(<span class="ident">never_type</span>)]</span>
 
 <span class="comment">// This returns `Ok(())` or `Err(nb::Error::WouldBlock)`</span>
 <span class="kw">fn</span> <span class="ident">maybe_blocking_api</span>() <span class="op">-&gt;</span> <span class="ident">nb</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="op">!</span><span class="op">&gt;</span> {
     <span class="comment">// ..</span>
-}</pre>
+}</pre></div>
 <p>Once your API uses <a href="type.Result.html"><code>nb::Result</code></a> you can leverage the
 <a href="macro.block.html"><code>block!</code></a>, <a href="macro.try_nb.html"><code>try_nb!</code></a> and <a href="macro.await.html"><code>await!</code></a> macros to adapt it for blocking
 operation, or for non-blocking operation with <code>futures</code> or <code>await</code>.</p>
@@ -67,7 +67,7 @@ feature.</p>
 <p><em>In this and the following examples let's assume for simplicity that peripherals are treated
 as global singletons and that no preemption is possible (i.e. interrupts are disabled).</em></p>
 
-<pre class="rust rust-example-rendered">
+<div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="attribute">#![<span class="ident">feature</span>(<span class="ident">never_type</span>)]</span>
 
 <span class="comment">// This is the `hal` crate</span>
@@ -117,11 +117,11 @@ as global singletons and that no preemption is possible (i.e. interrupts are dis
 
         <span class="comment">// ..</span>
     }
-}</pre>
+}</pre></div>
 <h2 id="blocking-mode" class="section-header"><a href="#blocking-mode">Blocking mode</a></h2>
 <p>Turn on an LED for one second and <em>then</em> loops back serial data.</p>
 
-<pre class="rust rust-example-rendered">
+<div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="attribute">#[<span class="ident">macro_use</span>(<span class="ident">block</span>)]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">nb</span>;
 
@@ -139,12 +139,12 @@ as global singletons and that no preemption is possible (i.e. interrupts are dis
         <span class="macro">block</span><span class="macro">!</span>(<span class="ident">Serial</span>.<span class="ident">write</span>(<span class="ident">byte</span>)).<span class="ident">unwrap</span>();
     }
 }
-</pre>
+</pre></div>
 <h2 id="futures" class="section-header"><a href="#futures"><code>futures</code></a></h2>
 <p>Blinks an LED every second <em>and</em> loops back serial data. Both tasks run
 concurrently.</p>
 
-<pre class="rust rust-example-rendered">
+<div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="attribute">#![<span class="ident">feature</span>(<span class="ident">conservative_impl_trait</span>)]</span>
 <span class="attribute">#![<span class="ident">feature</span>(<span class="ident">never_type</span>)]</span>
 
@@ -211,11 +211,11 @@ concurrently.</p>
         <span class="ident">loopback</span>.<span class="ident">poll</span>().<span class="ident">unwrap</span>();
     }
 }
-</pre>
+</pre></div>
 <h2 id="await" class="section-header"><a href="#await"><code>await!</code></a></h2>
 <p>This is equivalent to the <code>futures</code> example but with much less boilerplate.</p>
 
-<pre class="rust rust-example-rendered">
+<div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="attribute">#![<span class="ident">feature</span>(<span class="ident">generator_trait</span>)]</span>
 <span class="attribute">#![<span class="ident">feature</span>(<span class="ident">generators</span>)]</span>
 <span class="attribute">#![<span class="ident">feature</span>(<span class="ident">never_type</span>)]</span>
@@ -258,7 +258,7 @@ concurrently.</p>
         <span class="ident">loopback</span>.<span class="ident">resume</span>();
     }
 }
-</pre>
+</pre></div>
 </div><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
 <table>
                        <tr class=' module-item'>

@@ -6,13 +6,13 @@
 <p>The types that these interfaces define are quite lengthy, so it is recommended that you create
 a type alias. Here's an example for the I2C1 on an STM32F103xx:</p>
 
-<pre class="rust rust-example-rendered">
+<div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">type</span> <span class="ident">OledDisplay</span> <span class="op">=</span>
-  <span class="ident">GraphicsMode</span><span class="op">&lt;</span><span class="ident">I2cInterface</span><span class="op">&lt;</span><span class="ident">I2c</span><span class="op">&lt;</span><span class="ident">I2C1</span>, (<span class="ident">PB8</span><span class="op">&lt;</span><span class="ident">Alternate</span><span class="op">&lt;</span><span class="ident">OpenDrain</span><span class="op">&gt;&gt;</span>, <span class="ident">PB9</span><span class="op">&lt;</span><span class="ident">Alternate</span><span class="op">&lt;</span><span class="ident">OpenDrain</span><span class="op">&gt;&gt;</span>)<span class="op">&gt;&gt;</span><span class="op">&gt;</span>;</pre>
+  <span class="ident">GraphicsMode</span><span class="op">&lt;</span><span class="ident">I2cInterface</span><span class="op">&lt;</span><span class="ident">I2c</span><span class="op">&lt;</span><span class="ident">I2C1</span>, (<span class="ident">PB8</span><span class="op">&lt;</span><span class="ident">Alternate</span><span class="op">&lt;</span><span class="ident">OpenDrain</span><span class="op">&gt;&gt;</span>, <span class="ident">PB9</span><span class="op">&lt;</span><span class="ident">Alternate</span><span class="op">&lt;</span><span class="ident">OpenDrain</span><span class="op">&gt;&gt;</span>)<span class="op">&gt;&gt;</span><span class="op">&gt;</span>;</pre></div>
 <p><a href="https://github.com/jamwaffles/ssd1306/blob/master/examples/blinky_i2c.rs">Example</a></p>
 <p>Here's one for SPI1 on an STM32F103xx:</p>
 
-<pre class="rust rust-example-rendered">
+<div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">OledDisplay</span> <span class="op">=</span> <span class="ident">GraphicsMode</span><span class="op">&lt;</span>
     <span class="ident">SpiInterface</span><span class="op">&lt;</span>
         <span class="ident">Spi</span><span class="op">&lt;</span>
@@ -25,7 +25,7 @@ a type alias. Here's an example for the I2C1 on an STM32F103xx:</p>
         <span class="op">&gt;</span>,
         <span class="ident">PB1</span><span class="op">&lt;</span><span class="ident">Output</span><span class="op">&lt;</span><span class="ident">PushPull</span><span class="op">&gt;&gt;</span>,
     <span class="op">&gt;</span>,
-<span class="op">&gt;</span>;</pre>
+<span class="op">&gt;</span>;</pre></div>
 <p><a href="https://github.com/jamwaffles/ssd1306/blob/master/examples/blinky.rs">Example</a></p>
 </div><h2 id='reexports' class='section-header'><a href="#reexports">Re-exports</a></h2>
 <table><tr><td><code>pub use self::i2c::<a class="struct" href="../../ssd1306/interface/i2c/struct.I2cInterface.html" title="struct ssd1306::interface::i2c::I2cInterface">I2cInterface</a>;</code></td></tr><tr><td><code>pub use self::spi::<a class="struct" href="../../ssd1306/interface/spi/struct.SpiInterface.html" title="struct ssd1306::interface::spi::SpiInterface">SpiInterface</a>;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>

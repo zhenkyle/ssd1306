@@ -14,7 +14,7 @@
 <h1 id="examples" class="section-header"><a href="#examples">Examples</a></h1>
 <p>Use this interface to control the power output of some actuator</p>
 
-<pre class="rust rust-example-rendered">
+<div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">embedded_hal</span> <span class="kw">as</span> <span class="ident">hal</span>;
 
 <span class="kw">use</span> <span class="ident">hal</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>;
@@ -34,7 +34,7 @@
     <span class="comment">// dimmer LED</span>
     <span class="ident">pwm</span>.<span class="ident">set_duty</span>(<span class="ident">Channel</span>::<span class="ident">_2</span>, <span class="ident">max_duty</span> <span class="op">/</span> <span class="number">4</span>);
 }
-</pre>
+</pre></div>
 </div>
             <h2 id='associated-types' class='small-section-header'>
               Associated Types<a href='#associated-types' class='anchor'></a>

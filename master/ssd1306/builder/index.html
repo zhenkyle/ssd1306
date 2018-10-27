@@ -7,30 +7,30 @@ primitives and text.</p>
 <h1 id="examples" class="section-header"><a href="#examples">Examples</a></h1>
 <p>Connect over SPI with default rotation (0 deg) and size (128x64):</p>
 
-<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><pre class="rust rust-example-rendered ignore">
+<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
 <span class="kw">let</span> <span class="ident">spi</span> <span class="op">=</span> <span class="comment">/* SPI interface from your HAL of choice */</span>;
 <span class="kw">let</span> <span class="ident">dc</span> <span class="op">=</span> <span class="comment">/* GPIO data/command select pin */</span>;
 
-<span class="ident">Builder</span>::<span class="ident">new</span>().<span class="ident">connect_spi</span>(<span class="ident">spi</span>, <span class="ident">dc</span>);</pre>
+<span class="ident">Builder</span>::<span class="ident">new</span>().<span class="ident">connect_spi</span>(<span class="ident">spi</span>, <span class="ident">dc</span>);</pre></div>
 <p>Connect over I2C, changing lots of options</p>
 
-<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><pre class="rust rust-example-rendered ignore">
+<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
 <span class="kw">let</span> <span class="ident">i2c</span> <span class="op">=</span> <span class="comment">/* I2C interface from your HAL of choice */</span>;
 
 <span class="ident">Builder</span>::<span class="ident">new</span>()
     .<span class="ident">with_rotation</span>(<span class="ident">DisplayRotation</span>::<span class="ident">Rotate180</span>)
     .<span class="ident">with_i2c_addr</span>(<span class="number">0x3D</span>)
     .<span class="ident">with_size</span>(<span class="ident">DisplaySize</span>::<span class="ident">Display128x32</span>)
-    .<span class="ident">connect_i2c</span>(<span class="ident">i2c</span>);</pre>
+    .<span class="ident">connect_i2c</span>(<span class="ident">i2c</span>);</pre></div>
 <p>The above examples will produce a <a href="../mode/raw/struct.RawMode.html">RawMode</a> instance
 by default. You need to coerce them into a mode by specifying a type on assignment. For
 example, to use <a href="../mode/terminal/struct.TerminalMode.html"><code>TerminalMode</code> mode</a>:</p>
 
-<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><pre class="rust rust-example-rendered ignore">
+<div class='information'><div class='tooltip ignore'>ⓘ<span class='tooltiptext'>This example is not tested</span></div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore">
 <span class="kw">let</span> <span class="ident">spi</span> <span class="op">=</span> <span class="comment">/* SPI interface from your HAL of choice */</span>;
 <span class="kw">let</span> <span class="ident">dc</span> <span class="op">=</span> <span class="comment">/* GPIO data/command select pin */</span>;
 
-<span class="kw">let</span> <span class="ident">display</span>: <span class="ident">TerminalMode</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Builder</span>::<span class="ident">new</span>().<span class="ident">connect_spi</span>(<span class="ident">spi</span>, <span class="ident">dc</span>).<span class="ident">into</span>();</pre>
+<span class="kw">let</span> <span class="ident">display</span>: <span class="ident">TerminalMode</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Builder</span>::<span class="ident">new</span>().<span class="ident">connect_spi</span>(<span class="ident">spi</span>, <span class="ident">dc</span>).<span class="ident">into</span>();</pre></div>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                        <tr class=' module-item'>
