@@ -1,0 +1,6 @@
+var N = null;var sourcesIndex = {};
+sourcesIndex['embedded_graphics'] = {"name":"","dirs":[{"name":"fonts","dirs":[],"files":["font12x16.rs","font6x12.rs","font6x8.rs","font8x16.rs","font_builder.rs","mod.rs"]},{"name":"image","dirs":[],"files":["image16bpp.rs","image1bpp.rs","image8bpp.rs","mod.rs"]},{"name":"primitives","dirs":[],"files":["circle.rs","line.rs","mod.rs","rect.rs"]}],"files":["coord.rs","dev.rs","drawable.rs","lib.rs","pixelcolor.rs","prelude.rs","style.rs","transform.rs","unsignedcoord.rs"]};
+sourcesIndex['embedded_hal'] = {"name":"","dirs":[{"name":"blocking","dirs":[],"files":["delay.rs","i2c.rs","mod.rs","rng.rs","serial.rs","spi.rs"]}],"files":["adc.rs","digital.rs","lib.rs","prelude.rs","serial.rs","spi.rs","timer.rs","watchdog.rs"]};
+sourcesIndex['nb'] = {"name":"","dirs":[],"files":["lib.rs"]};
+sourcesIndex['ssd1306'] = {"name":"","dirs":[{"name":"interface","dirs":[],"files":["i2c.rs","mod.rs","spi.rs"]},{"name":"mode","dirs":[],"files":["displaymode.rs","graphics.rs","mod.rs","raw.rs","terminal.rs"]}],"files":["builder.rs","command.rs","displayrotation.rs","displaysize.rs","lib.rs","prelude.rs","properties.rs"]};
+sourcesIndex['void'] = {"name":"","dirs":[],"files":["lib.rs"]};
