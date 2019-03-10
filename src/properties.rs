@@ -6,22 +6,23 @@ use crate::displaysize::DisplaySize;
 use crate::interface::DisplayInterface;
 
 /// Display properties struct
-pub struct DisplayProperties<DI> {
+pub struct DisplayProperties<DI, DS> {
     iface: DI,
-    display_size: DisplaySize,
+    display_size: DS,
     display_rotation: DisplayRotation,
 }
 
-impl<DI> DisplayProperties<DI>
+impl<DI, DS> DisplayProperties<DI, DS>
 where
     DI: DisplayInterface,
+    DS: DisplaySize,
 {
     /// Create new DisplayProperties instance
     pub fn new(
         iface: DI,
-        display_size: DisplaySize,
+        display_size: DS,
         display_rotation: DisplayRotation,
-    ) -> DisplayProperties<DI> {
+    ) -> DisplayProperties<DI, DS> {
         DisplayProperties {
             iface,
             display_size,
@@ -83,7 +84,7 @@ where
     }
 
     /// Get the configured display size
-    pub fn get_size(&self) -> DisplaySize {
+    pub fn get_size(&self) -> DS {
         self.display_size
     }
 

@@ -26,20 +26,22 @@ use crate::properties::DisplayProperties;
 
 // TODO: Add to prelude
 /// Graphics mode handler
-pub struct GraphicsMode<DI>
+pub struct GraphicsMode<DI, DS>
 where
     DI: DisplayInterface,
+    DS: DisplaySize,
 {
-    properties: DisplayProperties<DI>,
+    properties: DisplayProperties<DI, DS>,
     buffer: [u8; 1024],
 }
 
-impl<DI> DisplayModeTrait<DI> for GraphicsMode<DI>
+impl<DI, DS> DisplayModeTrait<DI, DS> for GraphicsMode<DI, DS>
 where
     DI: DisplayInterface,
+    DS: DisplaySize,
 {
     /// Create new GraphicsMode instance
-    fn new(properties: DisplayProperties<DI>) -> Self {
+    fn new(properties: DisplayProperties<DI, DS>) -> Self {
         GraphicsMode {
             properties,
             buffer: [0; 1024],
@@ -47,14 +49,15 @@ where
     }
 
     /// Release all resources used by GraphicsMode
-    fn release(self) -> DisplayProperties<DI> {
+    fn release(self) -> DisplayProperties<DI, DS> {
         self.properties
     }
 }
 
-impl<DI> GraphicsMode<DI>
+impl<DI, DS> GraphicsMode<DI, DS>
 where
     DI: DisplayInterface,
+    DS: DisplaySize,
 {
     /// Clear the display buffer. You need to call `disp.flush()` for any effect on the screen
     pub fn clear(&mut self) {
@@ -166,9 +169,10 @@ extern crate embedded_graphics;
 use self::embedded_graphics::{drawable, pixelcolor::PixelColorU8, Drawing};
 
 #[cfg(feature = "graphics")]
-impl<DI> Drawing<PixelColorU8> for GraphicsMode<DI>
+impl<DI, DS> Drawing<PixelColorU8> for GraphicsMode<DI, DS>
 where
     DI: DisplayInterface,
+    DS: DisplaySize,
 {
     fn draw<T>(&mut self, item_pixels: T)
     where

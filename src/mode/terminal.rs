@@ -34,9 +34,10 @@ pub trait CharacterBitmap<T> {
 }
 
 /// A 7x7 font shamelessly borrowed from https://github.com/techninja/MarioChron/
-impl<DI> CharacterBitmap<char> for TerminalMode<DI>
+impl<DI, DS> CharacterBitmap<char> for TerminalMode<DI, DS>
 where
     DI: DisplayInterface,
+    DS: DisplaySize,
 {
     fn to_bitmap(input: char) -> [u8; 8] {
         // Populate the array with the data from the character array at the right index
@@ -141,28 +142,30 @@ where
 
 // TODO: Add to prelude
 /// Terminal mode handler
-pub struct TerminalMode<DI> {
-    properties: DisplayProperties<DI>,
+pub struct TerminalMode<DI, DS> {
+    properties: DisplayProperties<DI, DS>,
 }
 
-impl<DI> DisplayModeTrait<DI> for TerminalMode<DI>
+impl<DI, DS> DisplayModeTrait<DI, DS> for TerminalMode<DI, DS>
 where
     DI: DisplayInterface,
+    DS: DisplaySize,
 {
     /// Create new TerminalMode instance
-    fn new(properties: DisplayProperties<DI>) -> Self {
+    fn new(properties: DisplayProperties<DI, DS>) -> Self {
         TerminalMode { properties }
     }
 
     /// Release all resources used by TerminalMode
-    fn release(self) -> DisplayProperties<DI> {
+    fn release(self) -> DisplayProperties<DI, DS> {
         self.properties
     }
 }
 
-impl<DI> TerminalMode<DI>
+impl<DI, DS> TerminalMode<DI, DS>
 where
     DI: DisplayInterface,
+    DS: DisplaySize,
 {
     /// Clear the display
     pub fn clear(&mut self) -> Result<(), ()> {
@@ -207,7 +210,7 @@ where
     /// Print a character to the display
     pub fn print_char<T>(&mut self, c: T) -> Result<(), ()>
     where
-        TerminalMode<DI>: CharacterBitmap<T>,
+        TerminalMode<DI, DS>: CharacterBitmap<T>,
     {
         // Send the pixel data to the display
         self.properties.draw(&Self::to_bitmap(c))?;
@@ -227,9 +230,10 @@ where
     }
 }
 
-impl<DI> fmt::Write for TerminalMode<DI>
+impl<DI, DS> fmt::Write for TerminalMode<DI, DS>
 where
     DI: DisplayInterface,
+    DS: DisplaySize,
 {
     fn write_str(&mut self, s: &str) -> Result<(), fmt::Error> {
         s.chars().map(move |c| self.print_char(c)).last();

@@ -44,7 +44,7 @@ use hal;
 use hal::digital::OutputPin;
 
 use crate::displayrotation::DisplayRotation;
-use crate::displaysize::DisplaySize;
+use crate::displaysize::{Display128x64, DisplaySize};
 use crate::interface::{I2cInterface, SpiInterface};
 use crate::mode::displaymode::DisplayMode;
 use crate::mode::raw::RawMode;
@@ -52,30 +52,36 @@ use crate::properties::DisplayProperties;
 
 /// Builder struct. Driver options and interface are set using its methods.
 #[derive(Clone, Copy)]
-pub struct Builder {
-    display_size: DisplaySize,
+pub struct Builder<DS> {
+    display_size: DS,
     rotation: DisplayRotation,
     i2c_addr: u8,
 }
 
-impl Default for Builder {
+impl<DS> Default for Builder<DS>
+where
+    DS: DisplaySize,
+{
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl Builder {
+impl<DS> Builder<DS>
+where
+    DS: DisplaySize,
+{
     /// Create new builder with a default size of 128 x 64 pixels and no rotation.
     pub fn new() -> Self {
         Self {
-            display_size: DisplaySize::Display128x64,
+            display_size: Display128x64,
             rotation: DisplayRotation::Rotate0,
             i2c_addr: 0x3c,
         }
     }
 
-    /// Set the size of the display. Supported sizes are defined by [DisplaySize].
-    pub fn with_size(&self, display_size: DisplaySize) -> Self {
+    /// Set the size of the display. Supported sizes are defined in [crate::displaysize].
+    pub fn with_size(&self, display_size: DS) -> Self {
         Self {
             display_size,
             ..*self
@@ -96,7 +102,7 @@ impl Builder {
     }
 
     /// Finish the builder and use I2C to communicate with the display
-    pub fn connect_i2c<I2C>(&self, i2c: I2C) -> DisplayMode<RawMode<I2cInterface<I2C>>>
+    pub fn connect_i2c<I2C>(&self, i2c: I2C) -> DisplayMode<RawMode<I2cInterface<I2C>, DS>>
     where
         I2C: hal::blocking::i2c::Write,
     {
@@ -113,13 +119,13 @@ impl Builder {
         &self,
         spi: SPI,
         dc: DC,
-    ) -> DisplayMode<RawMode<SpiInterface<SPI, DC>>>
+    ) -> DisplayMode<RawMode<SpiInterface<SPI, DC>, DS>>
     where
         SPI: hal::blocking::spi::Transfer<u8> + hal::blocking::spi::Write<u8>,
         DC: OutputPin,
     {
         let properties =
             DisplayProperties::new(SpiInterface::new(spi, dc), self.display_size, self.rotation);
-        DisplayMode::<RawMode<SpiInterface<SPI, DC>>>::new(properties)
+        DisplayMode::<RawMode<SpiInterface<SPI, DC>, DS>>::new(properties)
     }
 }
