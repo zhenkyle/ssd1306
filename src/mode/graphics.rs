@@ -21,28 +21,30 @@ use hal::digital::OutputPin;
 use crate::displayrotation::DisplayRotation;
 use crate::displaysize::DisplaySize;
 use crate::interface::DisplayInterface;
+use crate::mode::displaybuffer::DisplayBuffer;
 use crate::mode::displaymode::DisplayModeTrait;
 use crate::properties::DisplayProperties;
 
-// TODO: Add to prelude
 /// Graphics mode handler
-pub struct GraphicsMode<DI>
+pub struct GraphicsMode<DI, B>
 where
     DI: DisplayInterface,
+    B: DisplayBuffer,
 {
     properties: DisplayProperties<DI>,
-    buffer: [u8; 1024],
+    buffer: B,
 }
 
-impl<DI> DisplayModeTrait<DI> for GraphicsMode<DI>
+impl<DI, B> DisplayModeTrait<DI> for GraphicsMode<DI, B>
 where
     DI: DisplayInterface,
+    B: DisplayBuffer,
 {
     /// Create new GraphicsMode instance
     fn new(properties: DisplayProperties<DI>) -> Self {
         GraphicsMode {
             properties,
-            buffer: [0; 1024],
+            buffer: B::new(),
         }
     }
 
@@ -52,13 +54,15 @@ where
     }
 }
 
-impl<DI> GraphicsMode<DI>
+impl<DI, B> GraphicsMode<DI, B>
 where
     DI: DisplayInterface,
+    B: DisplayBuffer,
 {
     /// Clear the display buffer. You need to call `disp.flush()` for any effect on the screen
     pub fn clear(&mut self) {
-        self.buffer = [0; 1024];
+        // self.buffer = [0; 1024];
+        self.buffer.clear();
     }
 
     /// Reset display
@@ -87,8 +91,8 @@ where
 
         match display_size {
             DisplaySize::Display128x64 => self.properties.draw(&self.buffer),
-            DisplaySize::Display128x32 => self.properties.draw(&self.buffer[0..512]),
-            DisplaySize::Display96x16 => self.properties.draw(&self.buffer[0..192]),
+            DisplaySize::Display128x32 => self.properties.draw(&self.buffer),
+            DisplaySize::Display96x16 => self.properties.draw(&self.buffer),
         }
     }
 
@@ -166,9 +170,10 @@ extern crate embedded_graphics;
 use self::embedded_graphics::{drawable, pixelcolor::PixelColorU8, Drawing};
 
 #[cfg(feature = "graphics")]
-impl<DI> Drawing<PixelColorU8> for GraphicsMode<DI>
+impl<DI, B> Drawing<PixelColorU8> for GraphicsMode<DI, B>
 where
     DI: DisplayInterface,
+    B: DisplayBuffer,
 {
     fn draw<T>(&mut self, item_pixels: T)
     where
