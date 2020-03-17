@@ -50,7 +50,7 @@ type Mic = stm32f1xx_hal::gpio::gpioa::PA3<stm32f1xx_hal::gpio::Analog>;
 // type Sampler = stm32f1xx_hal::dma::CircBuffer<[u16; NUM_SAMPLES], AdcChannelThing>;
 type Sampler = stm32f1xx_hal::adc::Adc<ADC1>;
 
-const NUM_SAMPLES: usize = 32;
+const NUM_SAMPLES: usize = 128;
 
 #[app(device = stm32f1xx_hal::pac, peripherals = true)]
 const APP: () = {
@@ -133,7 +133,7 @@ const APP: () = {
 
         let mut led = gpioc.pc13.into_push_pull_output(&mut gpioc.crh);
 
-        let mut timer = Timer::tim1(dp.TIM1, &clocks, &mut rcc.apb2).start_count_down(44.khz());
+        let mut timer = Timer::tim1(dp.TIM1, &clocks, &mut rcc.apb2).start_count_down(8.khz());
         timer.listen(timer::Event::Update);
 
         let mut timer2 = Timer::tim2(dp.TIM2, &clocks, &mut rcc.apb1).start_count_down(60.hz());
@@ -223,7 +223,7 @@ const APP: () = {
 
         // let mut normalised = sample_buf.clone();
 
-        let mut spectrum = microfft::real::rfft_32(&mut normalised);
+        let mut spectrum = microfft::real::rfft_128(&mut normalised);
 
         let offs = 16;
 

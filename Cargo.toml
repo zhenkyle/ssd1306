@@ -41,7 +41,7 @@ features = [ "libm" ]
 [dev-dependencies.microfft]
 version = "0.3.0"
 default-features = false
-features = [ "maxn-32" ]
+features = [ "maxn-128" ]
 
 [dependencies.rand]
 version = "0.7.3"
