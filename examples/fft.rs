@@ -10,7 +10,8 @@ use embedded_graphics::{
     geometry::Point, image::Image, pixelcolor::BinaryColor, pixelcolor::Rgb565, prelude::*,
     primitives::*, style::*,
 };
-use panic_halt as _;
+use num_traits::float::{Float, FloatCore};
+use panic_semihosting as _;
 use rtfm::app;
 use ssd1306::{prelude::*, Builder};
 use stm32f1xx_hal::{
@@ -195,25 +196,53 @@ const APP: () = {
         let x_scale = (display.size().width / (NUM_SAMPLES as u32 - 1)) as i32;
         let y_scale = (4096 as u32 / display.size().height) as i32;
 
-        sample_buf
-            .windows(2)
-            .enumerate()
-            .map(|(idx, parts)| {
-                let idx = idx as i32;
+        // sample_buf
+        //     .windows(2)
+        //     .enumerate()
+        //     .map(|(idx, parts)| {
+        //         let idx = idx as i32;
 
-                match parts {
-                    [start, end] => Line::new(
-                        Point::new(idx * x_scale, *start as i32 / y_scale),
-                        Point::new((idx + 1) * x_scale, *end as i32 / y_scale),
-                    )
-                    .into_styled(
-                        PrimitiveStyleBuilder::new()
-                            .stroke_color(BinaryColor::On)
-                            .build(),
-                    )
-                    .into_iter(),
-                    _ => unreachable!(),
-                }
+        //         match parts {
+        //             [start, end] => Line::new(
+        //                 Point::new(idx * x_scale, *start as i32 / y_scale),
+        //                 Point::new((idx + 1) * x_scale, *end as i32 / y_scale),
+        //             )
+        //             .into_styled(
+        //                 PrimitiveStyleBuilder::new()
+        //                     .stroke_color(BinaryColor::On)
+        //                     .build(),
+        //             )
+        //             .into_iter(),
+        //             _ => unreachable!(),
+        //         }
+        //     })
+        //     .flatten()
+        //     .draw(display);
+
+        let mut normalised = normalise_samples(sample_buf.clone());
+
+        // let mut normalised = sample_buf.clone();
+
+        let mut spectrum = microfft::real::rfft_32(&mut normalised);
+
+        let offs = 16;
+
+        spectrum
+            .iter()
+            // norm()
+            .map(|item| item.re.hypot(item.im))
+            .enumerate()
+            .map(|(idx, item)| {
+                Line::new(
+                    Point::new(idx as i32 * 2, 16),
+                    Point::new(idx as i32 * 2, 16 + (item * 10.0) as i32 + 1),
+                )
+                .into_styled(
+                    PrimitiveStyleBuilder::new()
+                        .stroke_color(BinaryColor::On)
+                        .build(),
+                )
+                .into_iter()
             })
             .flatten()
             .draw(display);
@@ -224,3 +253,33 @@ const APP: () = {
         timer2.clear_update_interrupt_flag();
     }
 };
+
+// Mic output has a DC bias of 1.25v. Assuming 3.3v supply voltage.
+const BIAS: f32 = (1.25 / 3.3);
+
+// 2Vpp (peak to peak) so 1v above bias voltage, or 2.25v
+const MAX: f32 = (2.25 / 3.3);
+const MIN: f32 = (0.25 / 3.3);
+
+// Normalise samples from -1.0 to 1.0 ready for FFT
+fn normalise_samples(buf: [u16; NUM_SAMPLES]) -> [f32; NUM_SAMPLES] {
+    // Half the mic input range in ADC value
+    let sample_range_half = 4096.0 * (MAX - MIN) / 2.0;
+    let adc_bias = BIAS * 4096.0;
+
+    let mut out = [0.0; NUM_SAMPLES];
+
+    for (idx, sample) in buf.iter().enumerate() {
+        let sample = *sample as f32;
+
+        // Subtract bias so sample is centered around 0
+        let sample = sample as f32 - adc_bias;
+
+        // Scale sample from -1 to 1
+        let sample = sample / sample_range_half;
+
+        out[idx] = sample
+    }
+
+    out
+}
