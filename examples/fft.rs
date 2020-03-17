@@ -10,7 +10,8 @@ use embedded_graphics::{
     geometry::Point, image::Image, pixelcolor::BinaryColor, pixelcolor::Rgb565, prelude::*,
     primitives::*, style::*,
 };
-use num_traits::float::{Float, FloatCore};
+use microfft::Complex32;
+use num_traits::float::Float;
 use panic_semihosting as _;
 use rtfm::app;
 use ssd1306::{prelude::*, Builder};
@@ -133,6 +134,7 @@ const APP: () = {
 
         let mut led = gpioc.pc13.into_push_pull_output(&mut gpioc.crh);
 
+        // FFT gives N bins with amplitudes up to half this sample rate
         let mut timer = Timer::tim1(dp.TIM1, &clocks, &mut rcc.apb2).start_count_down(8.khz());
         timer.listen(timer::Event::Update);
 
@@ -225,17 +227,19 @@ const APP: () = {
 
         let mut spectrum = microfft::real::rfft_128(&mut normalised);
 
+        // let offs = display.size().height as i32 / 2;
         let offs = 16;
 
         spectrum
             .iter()
-            // norm()
+            // Innards of the norm() function call. Note that this produces positive-only numbers
             .map(|item| item.re.hypot(item.im))
+            .map(|item| db(item).abs())
             .enumerate()
             .map(|(idx, item)| {
                 Line::new(
-                    Point::new(idx as i32 * 2, 16),
-                    Point::new(idx as i32 * 2, 16 + (item * 10.0) as i32 + 1),
+                    Point::new(idx as i32 * 2, offs),
+                    Point::new(idx as i32 * 2, offs + (item * 2.0) as i32 + 1),
                 )
                 .into_styled(
                     PrimitiveStyleBuilder::new()
@@ -282,4 +286,10 @@ fn normalise_samples(buf: [u16; NUM_SAMPLES]) -> [f32; NUM_SAMPLES] {
     }
 
     out
+}
+
+/// Convert imaginary number from FFT to decibel scale
+fn db(input: f32) -> f32 {
+    // 10.0 * (input.re.powi(2) + input.im.powi(2)).log10()
+    10.0 * input.log10()
 }
