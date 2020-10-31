@@ -26,7 +26,7 @@ generic-array = "0.14.2"
 
 [dependencies.embedded-graphics]
 optional = true
-version = "0.6.0"
+version = "0.7.0-alpha.1"
 
 [dev-dependencies]
 cortex-m = "0.6.2"
