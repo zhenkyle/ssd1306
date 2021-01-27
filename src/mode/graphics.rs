@@ -13,7 +13,7 @@
 //! use ssd1306::{mode::GraphicsMode, prelude::*, Builder, I2CDIBuilder};
 //!
 //! let interface = I2CDIBuilder::new().init(i2c);
-//! let mut display: GraphicsMode<_> = Builder::new().connect(interface).into();
+//! let mut display: GraphicsMode<_, _> = Builder::new().connect(interface).into();
 //!
 //! display.init().unwrap();
 //!
@@ -55,7 +55,7 @@
 //!
 //! [embedded_graphics]: https://crates.io/crates/embedded_graphics
 
-use crate::displaysize::{DisplaySize, DisplaySize128x64};
+use crate::displaysize::DisplaySize;
 use display_interface::{DisplayError, WriteOnlyDataCommand};
 use generic_array::GenericArray;
 
@@ -66,7 +66,7 @@ use crate::{
 
 // TODO: Add to prelude
 /// Graphics mode handler
-pub struct GraphicsMode<DI, DSIZE = DisplaySize128x64>
+pub struct GraphicsMode<DI, DSIZE>
 where
     DSIZE: DisplaySize,
 {
@@ -146,13 +146,20 @@ where
         self.max_y = 0;
 
         // Tell the display to update only the part that has changed
+        let offset_x = match self.properties.get_rotation() {
+            DisplayRotation::Rotate0 | DisplayRotation::Rotate270 => DSIZE::OFFSETX,
+            DisplayRotation::Rotate180 | DisplayRotation::Rotate90 => {
+                // If segment remapping is flipped, we need to calculate
+                // the offset from the other edge of the display.
+                DSIZE::DRIVER_COLS - DSIZE::WIDTH - DSIZE::OFFSETX
+            }
+        };
         match self.properties.get_rotation() {
             DisplayRotation::Rotate0 | DisplayRotation::Rotate180 => {
                 self.properties.set_draw_area(
-                    (disp_min_x + DSIZE::OFFSETX, disp_min_y + DSIZE::OFFSETY),
-                    (disp_max_x + DSIZE::OFFSETX, disp_max_y + DSIZE::OFFSETY),
+                    (disp_min_x + offset_x, disp_min_y + DSIZE::OFFSETY),
+                    (disp_max_x + offset_x, disp_max_y + DSIZE::OFFSETY),
                 )?;
-
                 self.properties.bounded_draw(
                     &self.buffer,
                     width as usize,
@@ -162,10 +169,9 @@ where
             }
             DisplayRotation::Rotate90 | DisplayRotation::Rotate270 => {
                 self.properties.set_draw_area(
-                    (disp_min_y + DSIZE::OFFSETY, disp_min_x + DSIZE::OFFSETX),
-                    (disp_max_y + DSIZE::OFFSETY, disp_max_x + DSIZE::OFFSETX),
+                    (disp_min_y + offset_x, disp_min_x + DSIZE::OFFSETY),
+                    (disp_max_y + offset_x, disp_max_x + DSIZE::OFFSETY),
                 )?;
-
                 self.properties.bounded_draw(
                     &self.buffer,
                     height as usize,

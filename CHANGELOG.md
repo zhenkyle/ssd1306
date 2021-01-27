@@ -6,6 +6,28 @@
 
 ## [Unreleased] - ReleaseDate
 
+- [#145](https://github.com/jamwaffles/ssd1306/pull/145) Fixed rotation for 96x16 and 72x40 displays.
+
+## [0.5.1] - 2021-01-09
+
+## [0.5.0] - 2020-12-21
+
+## [0.4.2] - 2020-12-15 (yanked)
+
+### Changed
+
+- **(breaking)** [#139](https://github.com/jamwaffles/ssd1306/pull/139) Removed default display size type parameters.
+
+### Fixed
+
+- [#141](https://github.com/jamwaffles/ssd1306/pull/141) 72x40 displays can now be set to higher brightnesses, matching other sizes.
+
+## [0.4.1] - 2020-12-01
+
+### Changed
+
+- [#137](https://github.com/jamwaffles/ssd1306/pull/137) Replaced `TerminalMode` font with a new, more consistent one. This now uses the `zxpix` font from <https://jared.geek.nz/2014/jan/custom-fonts-for-microcontrollers>.
+
 ## [0.4.0] - 2020-08-03
 
 ### Added
@@ -110,9 +132,13 @@
 - Builder docs clarify the order of method calls (#89)
 
 <!-- next-url -->
-[unreleased]: https://github.com/jamwaffles/ssd1306/compare/v0.4.0...HEAD
-[0.4.0]: https://github.com/jamwaffles/ssd1306/compare/v0.3.1...v0.4.0
+[unreleased]: https://github.com/jamwaffles/ssd1306/compare/v0.5.1...HEAD
+[0.5.1]: https://github.com/jamwaffles/ssd1306/compare/v0.5.0...v0.5.1
 
+[0.5.0]: https://github.com/jamwaffles/ssd1306/compare/v0.4.2...v0.5.0
+[0.4.2]: https://github.com/jamwaffles/ssd1306/compare/v0.4.1...v0.4.2
+[0.4.1]: https://github.com/jamwaffles/ssd1306/compare/v0.4.0...v0.4.1
+[0.4.0]: https://github.com/jamwaffles/ssd1306/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/jamwaffles/ssd1306/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/jamwaffles/ssd1306/compare/v0.3.0-alpha.4...v0.3.0
 [0.3.0-alpha.4]: https://github.com/jamwaffles/ssd1306/compare/v0.3.0-alpha.3...v0.3.0-alpha.4

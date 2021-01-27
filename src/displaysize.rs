@@ -18,6 +18,12 @@ pub trait DisplaySize {
     /// Height in pixels
     const HEIGHT: u8;
 
+    /// Maximum width supported by the display driver
+    const DRIVER_COLS: u8 = 128;
+
+    /// Maximum height supported by the display driver
+    const DRIVER_ROWS: u8 = 64;
+
     /// Horizontal offset in pixels
     const OFFSETX: u8 = 0;
 
@@ -28,9 +34,10 @@ pub trait DisplaySize {
     /// width * height / 8
     type BufferSize: ArrayLength<u8>;
 
-    /// Send resolution-dependent configuration to the display
+    /// Send resolution and model-dependent configuration to the display
     ///
     /// See [`Command::ComPinConfig`](../command/enum.Command.html#variant.ComPinConfig)
+    /// and [`Command::InternalIref`](../command/enum.Command.html#variant.InternalIref)
     /// for more information
     fn configure(&self, iface: &mut impl WriteOnlyDataCommand) -> Result<(), DisplayError>;
 }
@@ -85,7 +92,8 @@ impl DisplaySize for DisplaySize72x40 {
     type BufferSize = U360;
 
     fn configure(&self, iface: &mut impl WriteOnlyDataCommand) -> Result<(), DisplayError> {
-        Command::ComPinConfig(true, false).send(iface)
+        Command::ComPinConfig(true, false).send(iface)?;
+        Command::InternalIref(true, true).send(iface)
     }
 }
 
